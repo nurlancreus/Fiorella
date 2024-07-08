@@ -18,6 +18,8 @@ namespace Fiorella.App
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
 
+            builder.Services.AddRouting(options => options.LowercaseUrls = true);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
