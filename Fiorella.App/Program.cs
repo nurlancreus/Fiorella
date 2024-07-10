@@ -43,14 +43,14 @@ namespace Fiorella.App
 
             _ = app.UseEndpoints(endpoints =>
             {
+                _ = endpoints.MapAreaControllerRoute(
+                  name: "admin",
+                   areaName: "admin",
+                   pattern: "admin/{controller=Home}/{action=Index}/{id?}");
+
                 _ = endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-                _ = endpoints.MapAreaControllerRoute(
-                   name: "admin",
-                    areaName: "admin",
-                    pattern: "admin/{controller=Home}/{action=Index}/{id?}");
             });
 
 
