@@ -28,12 +28,67 @@ namespace Fiorella.App.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(category);
+            }
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+
+            Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            if(category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update (int id, Category updatedCategory)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(updatedCategory);
+            }
+
+            Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            category.Name = updatedCategory.Name;
+            category.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Remove(int id)
+        {
+            Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+
+            if(category == null)
+            {
+                return NotFound();
+            }
+
+            category.IsDeleted = true;
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Blog>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Image</th>
+                <th scope="col">Update</th>
+                <th scope="col">Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Title</td>
+                    <td><img src="~/assets/blog/@item.Image" alt="Blog image" /> </td>
+                    <td><a asp-controller="blog" asp-action="update" asp-route-id="@item.Id"><i class="far fa-pen-to-square"></i></a> </td>
+                    <td>
+                        <a onclose="return confirm('Are you sure?')" asp-controller="blog" asp-action="remove" asp-route-id="@item.Id">
+                            <i class="fas fa-trash"></i>
+
+                        </a>
+
+                    </td>
+                </tr>
+            }
+
+            <a asp-controller="blog" asp-action="create" class="btn btn-success">Create blog</a>
+        </tbody>
+    </table>
+</div>

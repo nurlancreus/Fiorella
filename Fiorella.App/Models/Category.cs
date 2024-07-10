@@ -1,9 +1,12 @@
 ﻿using Fiorella.App.Models.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace Fiorella.App.Models
 {
     public class Category : BaseEntity
     {
-        public string Name { get; set; }
+        [Required(ErrorMessage = "The name is required.")]
+        [StringLength(30)]
+        public string Name { get; set; } = string.Empty;
     }
 }

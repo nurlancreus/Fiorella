@@ -1,0 +1,23 @@
+﻿@model Blog
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="@Model.Title" class="form-label">Title</label>
+            <input type="text" class="form-control" asp-for="@Model.Title">
+            <span asp-validation-for="@Model.Title" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Description" class="form-label">Description</label>
+            <input type="text" class="form-control" asp-for="@Model.Description">
+            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.FormFile" class="form-label">Image</label>
+            <input type="file" class="form-control" asp-for="@Model.FormFile">
+            <span asp-validation-for="@Model.FormFile" class="text text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        @Html.AntiForgeryToken()
+    </form>
+</div>
