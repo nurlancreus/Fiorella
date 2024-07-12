@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Category>
+﻿@model HomeViewModel;
 
 
 <section id="introduce" class="col-lg-12 col-sm-12 col-12">
@@ -40,7 +40,7 @@
                                                                  class="fas fa-chevron-down"></i>
                     <div class="mdcategories" style="max-width:min-content;">
                         <span id="firstfilter" data-id="all">ALL</span>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Categories)
                         {
                             <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
                         }
@@ -48,7 +48,7 @@
                 </div>
                 <div class="filters col-lg-10  ">
                     <span id="firstfilter" data-id="all">ALL</span>
-                    @foreach (var item in Model)
+                    @foreach (var item in Model.Categories)
                     {
                         <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
                     }
@@ -388,45 +388,26 @@
             </div>
         </div>
         <div class="row">
-            <div class="blog col-lg-4">
-                <div class="image">
-                    <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/blog-feature-img-1.jpg"
-                         alt="">
-                    <span class="badge bg-light text-dark">03.08.2018</span>
-                </div>
-                <div class="title">
-                    <h4>Flower Power</h4>
-                </div>
-                <div class="desc">
-                    <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per</p>
-                </div>
-            </div>
-            <div class="blog col-lg-4">
-                <div class="image">
-                    <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/blog-feature-img-3.jpg"
-                         alt="">
-                    <span class="badge bg-light text-dark">03.08.2018</span>
-                </div>
-                <div class="title">
-                    <h4>Local florists</h4>
-                </div>
-                <div class="desc">
-                    <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per</p>
-                </div>
-            </div>
-            <div class="blog col-lg-4">
-                <div class="image">
-                    <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/blog-feature-img-4.jpg"
-                         alt="">
-                    <span class="badge bg-light text-dark">03.08.2018</span>
-                </div>
-                <div class="title">
-                    <h4>Flower beauty</h4>
-                </div>
-                <div class="desc">
-                    <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per</p>
-                </div>
-            </div>
+            @if (Model.Blogs != null)
+            {
+                @foreach (var blog in Model.Blogs)
+                {
+
+                    <div class="blog col-lg-4">
+                        <div class="image">
+                            <img src="~/assets/images/blog/@(blog.Image ?? "default-img.jpg")"
+                                 alt="">
+                            <span class="badge bg-light text-dark">@blog.CreatedAt.ToString("mm dd yyyy")</span>
+                        </div>
+                        <div class="title">
+                            <h4>@blog.Title</h4>
+                        </div>
+                        <div class="desc">
+                            <p>@blog.Description</p>
+                        </div>
+                    </div>
+                }
+            }
         </div>
     </div>
 

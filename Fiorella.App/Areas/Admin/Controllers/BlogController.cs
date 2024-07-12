@@ -1,7 +1,9 @@
-﻿using Fiorella.App.Areas.Admin.Extensions;
-using Fiorella.App.Context;
+﻿using Fiorella.App.Context;
+using Fiorella.App.Extensions;
+using Fiorella.App.Helpers;
 using Fiorella.App.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fiorella.App.Areas.Admin.Controllers
@@ -39,21 +41,23 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return View();
             }
 
-            string root = _webEnv.WebRootPath;
-            //string path = "assets/images/blog";
-            //string fileName = Guid.NewGuid().ToString() + blog.FormFile.FileName;
-            //string fullPath = Path.Combine(root, path, fileName);
 
-            //using (FileStream fileStream = new(fullPath, FileMode.Create))
-            //{
-            //    blog.FormFile.CopyTo(fileStream);
+            if (blog.FormFile != null)
+            {
+                if (!Helper.IsImage(blog.FormFile))
+                {
+                    ModelState.AddModelError("FormFile", "File type must be an image.");
+                    return View();
+                }
 
+                if (!Helper.IsSizeOk(blog.FormFile, 1))
+                {
+                    ModelState.AddModelError("FormFile", "File size must be less than 1 mbs.");
+                    return View();
+                }
 
-            if (blog.FormFile == null) return View();
-
-            string fileName = await blog.FormFile.GetFileNameAsync(root, "assets/images/blog");
-
-            blog.Image = fileName;
+                blog.Image = await blog.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/blog");
+            }
 
             await _context.Blogs.AddAsync(blog);
             await _context.SaveChangesAsync();
@@ -78,10 +82,6 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, Blog updatedBlog)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(updatedBlog);
-            }
 
             Blog? blog = await _context.Blogs.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
 
@@ -99,7 +99,24 @@ namespace Fiorella.App.Areas.Admin.Controllers
             blog.Description = updatedBlog.Description;
 
             if (updatedBlog.FormFile != null)
-                blog.Image = await updatedBlog.FormFile.GetFileNameAsync(_webEnv.WebRootPath, "assets/images/blog");
+            {
+                if (!Helper.IsImage(updatedBlog.FormFile))
+                {
+                    ModelState.AddModelError("FormFile", "File type must be an image.");
+                    return View();
+                }
+
+                if (!Helper.IsSizeOk(updatedBlog.FormFile, 1))
+                {
+                    ModelState.AddModelError("FormFile", "File size must be less than 1 mbs.");
+                    return View();
+                }
+
+                if (blog.Image != null)
+                    Helper.RemoveImage(_webEnv.WebRootPath, "assets/images/blog", blog.Image);
+
+                blog.Image = await updatedBlog.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/blog");
+            }
 
             blog.UpdatedAt = DateTime.Now;
 

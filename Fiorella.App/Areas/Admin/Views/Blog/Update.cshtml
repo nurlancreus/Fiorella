@@ -17,7 +17,7 @@
                 Image <div>
                     <div class="input-group-append">
                         <span class="input-group-text d-flex gap-2">
-                            @if (Model.Image != null)
+                            @if (Model?.Image != null)
                             {
                                 <div class="btn btn-primary">Change Image</div>
                                 @Model.Image
@@ -32,13 +32,13 @@
                 </div>
             </label>
             <div class="input-group">
-                <input type="file" class="form-control" asp-for="FormFile" hidden>
+                <input type="file" accept="image/*" class="form-control" asp-for="FormFile" hidden>
 
             </div>
             <span asp-validation-for="FormFile" class="text text-danger"></span>
         </div>
         <div style="width:100px">
-            <img style="width:100%" src="~/assets/images/blog/@Model.Image" alt="blog image" />
+            <img style="width:100%" src="~/assets/images/blog/@(Model.Image ?? "default-img.jpg")" alt="blog image" />
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
         @Html.AntiForgeryToken()

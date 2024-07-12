@@ -1,10 +1,10 @@
 ﻿using Fiorella.App.Models;
 
-namespace Fiorella.App.Areas.Admin.Extensions
+namespace Fiorella.App.Extensions
 {
-    public static class AdminAreaExtensions
+    public static class FileUpload
     {
-        public static async Task<string> GetFileNameAsync(this IFormFile formFile, string root, string path)
+        public static async Task<string> SaveFileAsync(this IFormFile formFile, string root, string path)
         {
             string fileName = Guid.NewGuid().ToString() + formFile.FileName;
             string fullPath = Path.Combine(root, path, fileName);
