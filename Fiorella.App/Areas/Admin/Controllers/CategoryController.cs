@@ -31,7 +31,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(category);
             }
@@ -46,7 +46,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         {
 
             Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
-            if(category == null)
+            if (category == null)
             {
                 return NotFound();
             }
@@ -56,17 +56,18 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update (int id, Category updatedCategory)
+        public async Task<IActionResult> Update(int id, Category updatedCategory)
         {
-            if(!ModelState.IsValid)
-            {
-                return View(updatedCategory);
-            }
 
             Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
             if (category == null)
             {
                 return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(category);
             }
 
             category.Name = updatedCategory.Name;
@@ -76,11 +77,12 @@ namespace Fiorella.App.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
             Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
 
-            if(category == null)
+            if (category == null)
             {
                 return NotFound();
             }

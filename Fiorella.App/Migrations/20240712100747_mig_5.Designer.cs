@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fiorella.App.Migrations
 {
     [DbContext(typeof(FiorellaDbContext))]
-    [Migration("20240710124340_mig_5")]
+    [Migration("20240712100747_mig_5")]
     partial class mig_5
     {
         /// <inheritdoc />
@@ -41,7 +41,6 @@ namespace Fiorella.App.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
