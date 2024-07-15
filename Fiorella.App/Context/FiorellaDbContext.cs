@@ -12,5 +12,7 @@ namespace Fiorella.App.Context
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Position> Positions { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }

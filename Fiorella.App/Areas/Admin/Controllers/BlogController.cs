@@ -46,13 +46,13 @@ namespace Fiorella.App.Areas.Admin.Controllers
             {
                 if (!Helper.IsImage(blog.FormFile))
                 {
-                    ModelState.AddModelError("FormFile", "File type must be an image.");
+                    ModelState.AddModelError(nameof(blog.FormFile), "File type must be an image.");
                     return View();
                 }
 
                 if (!Helper.IsSizeOk(blog.FormFile, 1))
                 {
-                    ModelState.AddModelError("FormFile", "File size must be less than 1 mbs.");
+                    ModelState.AddModelError(nameof(blog.FormFile), "File size must be less than 1 mbs.");
                     return View();
                 }
 
@@ -95,20 +95,17 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return View(blog);
             }
 
-            blog.Title = updatedBlog.Title;
-            blog.Description = updatedBlog.Description;
-
             if (updatedBlog.FormFile != null)
             {
                 if (!Helper.IsImage(updatedBlog.FormFile))
                 {
-                    ModelState.AddModelError("FormFile", "File type must be an image.");
+                    ModelState.AddModelError(nameof(blog.FormFile), "File type must be an image.");
                     return View();
                 }
 
                 if (!Helper.IsSizeOk(updatedBlog.FormFile, 1))
                 {
-                    ModelState.AddModelError("FormFile", "File size must be less than 1 mbs.");
+                    ModelState.AddModelError(nameof(blog.FormFile), "File size must be less than 1 mbs.");
                     return View();
                 }
 
@@ -118,6 +115,8 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 blog.Image = await updatedBlog.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/blog");
             }
 
+            blog.Title = updatedBlog.Title;
+            blog.Description = updatedBlog.Description;
             blog.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();

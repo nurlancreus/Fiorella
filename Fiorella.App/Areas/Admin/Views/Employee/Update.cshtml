@@ -1,0 +1,56 @@
+﻿@model Employee
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label">FirstName</label>
+            <input type="text" class="form-control" asp-for="FirstName">
+            <span asp-validation-for="FirstName" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label">LastName</label>
+            <input type="text" class="form-control" asp-for="LastName">
+            <span asp-validation-for="LastName" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <select asp-for="@Model.PositionId" class="form-select" aria-label="Select employee position">
+                <option selected>Choose Position</option>
+                @foreach (var position in ViewBag.Positions)
+                {
+                    <option value="@position.Id">@position.Name</option>
+                }
+            </select>
+            <span asp-validation-for="@Model.PositionId" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="FormFile" class="form-label">
+                Image <div>
+                    <div class="input-group-append">
+                        <span class="input-group-text d-flex gap-2">
+                            @if (Model?.Image != null)
+                            {
+                                <div class="btn btn-primary">Change Image</div>
+                                @Model.Image
+                            }
+                            else
+                            {
+                                <div class="btn btn-primary">Upload Image</div>
+                                <span>No file chosen</span>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </label>
+            <div class="input-group">
+                <input type="file" accept="image/*" class="form-control" asp-for="FormFile" hidden>
+
+            </div>
+            <span asp-validation-for="FormFile" class="text text-danger"></span>
+        </div>
+        <div style="width:100px">
+            <img style="width:100%" src="~/assets/images/Employee/@(Model?.Image ?? "default-img.jpg")" alt="Employee image" />
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        @Html.AntiForgeryToken()
+    </form>
+</div>

@@ -22,6 +22,7 @@ namespace Fiorella.App.Controllers
             {
                 Categories = await _context.Categories.Where(x => !x.IsDeleted).ToListAsync(),
                 Blogs = await _context.Blogs.Where(x => !x.IsDeleted).OrderByDescending(x => x.CreatedAt).Take(3).ToListAsync(),
+                Employees = await _context.Employees.Where(x => !x.IsDeleted).Include(x => x.Position).OrderByDescending(x => x.CreatedAt).Take(4).ToListAsync()
             };
 
             return View(model);

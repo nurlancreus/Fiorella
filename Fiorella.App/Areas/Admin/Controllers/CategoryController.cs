@@ -35,6 +35,13 @@ namespace Fiorella.App.Areas.Admin.Controllers
             {
                 return View(category);
             }
+
+            if (await _context.Categories.AnyAsync(x => x.Name.Equals(category.Name, StringComparison.CurrentCultureIgnoreCase) && !x.IsDeleted))
+            {
+                ModelState.AddModelError(nameof(category.Name), $"Category {category.Name} is already exist");
+                return View();
+            }
+
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
 

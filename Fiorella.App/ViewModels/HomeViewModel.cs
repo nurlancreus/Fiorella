@@ -6,6 +6,7 @@ namespace Fiorella.App.ViewModels
     {
         public ICollection<Category>? Categories { get; set; }
         public ICollection<Blog>? Blogs { get; set; }
+        public ICollection<Employee>? Employees { get; set; }
 
     }
 }

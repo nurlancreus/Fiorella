@@ -297,56 +297,22 @@
         </div>
         <div class="row">
             <div class="experts">
-                <div class="expert col-md-6 col-12 col-lg-3">
-                    <div class="photo">
-                        <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/h3-team-img-1.png"
-                             alt="">
+                @foreach (var employee in Model.Employees)
+                {
+
+                    <div class="expert col-md-6 col-12 col-lg-3">
+                        <div class="photo" style="border-radius: 100vw; width: 250px; height: 200px; overflow: hidden">
+                            <img src="~/assets/images/employee/@(employee.Image ?? "default-img.jpg")"
+                                 alt="" style="object-fit: cover; width: 100%; height: 100%">
+                        </div>
+                        <div class="name">
+                            <p>@employee.FirstName @employee.LastName</p>
+                        </div>
+                        <div class="job">
+                            <p>@employee.Position?.Name</p>
+                        </div>
                     </div>
-                    <div class="name">
-                        <p>CRYSTAL BROOKS</p>
-                    </div>
-                    <div class="job">
-                        <p>Florist</p>
-                    </div>
-                </div>
-                <div class="expert col-md-6 col-12 col-lg-3">
-                    <div class="photo">
-                        <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/h3-team-img-2.png"
-                             alt="">
-                    </div>
-                    <div class="name">
-                        <p>SHIRLEY HARRIS</p>
-                    </div>
-                    <div class="job">
-                        <p>Manager</p>
-                    </div>
-                </div>
-                <div class="expert col-md-6 col-12 col-lg-3">
-                    <div class="photo">
-                        <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/h3-team-img-3.png"
-                             alt="">
-                    </div>
-                    <div class="name">
-                        <p>
-                            BEVERLY CLARK
-                        </p>
-                    </div>
-                    <div class="job">
-                        <p>Florist</p>
-                    </div>
-                </div>
-                <div class="expert col-md-6 col-12 col-lg-3">
-                    <div class="photo">
-                        <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/h3-team-img-4.png"
-                             alt="">
-                    </div>
-                    <div class="name">
-                        <p>AMANDA WATKINS</p>
-                    </div>
-                    <div class="job">
-                        <p>Florist</p>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </div>
@@ -403,7 +369,7 @@
                             <h4>@blog.Title</h4>
                         </div>
                         <div class="desc">
-                            <p>@blog.Description</p>
+                            <p>@blog.Description.Substring(0, Math.Min(blog.Description.Length, 40))...</p>
                         </div>
                     </div>
                 }
