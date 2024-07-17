@@ -1,4 +1,6 @@
-﻿using Fiorella.App.Context;
+﻿using AutoMapper;
+using Fiorella.App.Context;
+using Fiorella.App.Dtos.Blog;
 using Fiorella.App.Extensions;
 using Fiorella.App.Helpers;
 using Fiorella.App.Models;
@@ -13,16 +15,26 @@ namespace Fiorella.App.Areas.Admin.Controllers
     {
         private readonly FiorellaDbContext _context;
         private readonly IWebHostEnvironment _webEnv;
+        private readonly IMapper _mapper;
 
-        public BlogController(FiorellaDbContext context, IWebHostEnvironment _env)
+        public BlogController(FiorellaDbContext context, IWebHostEnvironment env, IMapper mapper)
         {
             _context = context;
-            _webEnv = _env;
+            _webEnv = env;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ICollection<Blog> blogs = await _context.Blogs.Where(x => !x.IsDeleted).ToListAsync();
+            //ICollection<Blog> blogs = await _context.Blogs.Where(x => !x.IsDeleted).ToListAsync();
+            var query = _context.Blogs.Where(b => !b.IsDeleted).AsQueryable();
+            ICollection<BlogGetDto> blogs = await query.Select(b => new BlogGetDto()
+            {
+                Id = b.Id,
+                Title = b.Title,
+                Description = b.Description,
+                Image = b.Image
+            }).ToListAsync();
 
             return View(blogs);
         }
@@ -34,30 +46,31 @@ namespace Fiorella.App.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Blog blog)
+        public async Task<IActionResult> Create(BlogPostDto blogDto)
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-
-            if (blog.FormFile != null)
+            if (blogDto.FormFile != null)
             {
-                if (!Helper.IsImage(blog.FormFile))
-                {
-                    ModelState.AddModelError(nameof(blog.FormFile), "File type must be an image.");
-                    return View();
-                }
+                //if (!Helper.IsImage(blogDto.FormFile))
+                //{
+                //    ModelState.AddModelError(nameof(blogDto.FormFile), "File type must be an image.");
+                //    return View();
+                //}
 
-                if (!Helper.IsSizeOk(blog.FormFile, 1))
-                {
-                    ModelState.AddModelError(nameof(blog.FormFile), "File size must be less than 1 mbs.");
-                    return View();
-                }
+                //if (!Helper.IsSizeOk(blogDto.FormFile, 1))
+                //{
+                //    ModelState.AddModelError(nameof(blogDto.FormFile), "File size must be less than 1 mbs.");
+                //    return View();
+                //}
 
-                blog.Image = await blog.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/blog");
+                blogDto.Image = await blogDto.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/blog");
             }
+
+            Blog blog = _mapper.Map<Blog>(blogDto);
 
             await _context.Blogs.AddAsync(blog);
             await _context.SaveChangesAsync();
@@ -75,12 +88,23 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(blog);
+            BlogUpdateDto blogDto = new()
+            {
+                Title = blog.Title,
+                Description = blog.Description,
+            };
+
+            if (blog.Image != null)
+            {
+                blogDto.Image = blog.Image;
+            }
+
+            return View(blogDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, Blog updatedBlog)
+        public async Task<IActionResult> Update(int id, BlogUpdateDto updatedBlog)
         {
 
             Blog? blog = await _context.Blogs.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
@@ -92,22 +116,22 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(blog);
+                return View(updatedBlog);
             }
 
             if (updatedBlog.FormFile != null)
             {
-                if (!Helper.IsImage(updatedBlog.FormFile))
-                {
-                    ModelState.AddModelError(nameof(blog.FormFile), "File type must be an image.");
-                    return View();
-                }
+                //if (!Helper.IsImage(updatedBlog.FormFile))
+                //{
+                //    ModelState.AddModelError(nameof(updatedBlog.FormFile), "File type must be an image.");
+                //    return View();
+                //}
 
-                if (!Helper.IsSizeOk(updatedBlog.FormFile, 1))
-                {
-                    ModelState.AddModelError(nameof(blog.FormFile), "File size must be less than 1 mbs.");
-                    return View();
-                }
+                //if (!Helper.IsSizeOk(updatedBlog.FormFile, 1))
+                //{
+                //    ModelState.AddModelError(nameof(updatedBlog.FormFile), "File size must be less than 1 mbs.");
+                //    return View();
+                //}
 
                 if (blog.Image != null)
                     Helper.RemoveImage(_webEnv.WebRootPath, "assets/images/blog", blog.Image);
@@ -117,7 +141,6 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             blog.Title = updatedBlog.Title;
             blog.Description = updatedBlog.Description;
-            blog.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

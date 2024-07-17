@@ -14,7 +14,7 @@
         </div>
         <div class="mb-3">
             <select asp-for="@Model.PositionId" class="form-select" aria-label="Select employee position">
-                <option selected>Choose Position</option>
+                <option selected value="0">Choose Position</option>
                 @foreach (var position in ViewBag.Positions)
                 {
                     <option value="@position.Id">@position.Name</option>

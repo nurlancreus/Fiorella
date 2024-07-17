@@ -1,0 +1,8 @@
+﻿@model FormGroupViewModel
+
+<div class="mb-3">
+    <label for="@Model.LabelFor" class="form-label">@Model.LabelText</label>
+    <input type="@Model.InputType" class="@Model.InputClass" id="@Model.LabelFor" name="@Model.LabelFor" accept="@Model.Accept">
+    <span asp-validation-for="@Model.LabelFor" class="@Model.ValidationClass"></span>
+</div>
+

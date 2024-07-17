@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Blog>
+﻿@model IEnumerable<BlogGetDto>
 
 <div class="container">
     <table class="table table-striped">
@@ -20,7 +20,7 @@
                     <td>@item.Title</td>
                     <td>@item.Description</td>
                     <td>
-                        <img src="~/assets/images/blog/@(item.Image ?? "default-img.jpg")" alt="Blog image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" />
+                        <img src="~/assets/images/blog/@item.Image" alt="Blog image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" />
                     </td>
                     <td>
                         <a asp-area="admin" asp-controller="Blog" asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary">

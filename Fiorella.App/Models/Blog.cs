@@ -6,13 +6,13 @@ namespace Fiorella.App.Models
 {
     public class Blog : BaseEntity
     {
-        [Required]
+        //[Required]
         public string Title { get; set; } = string.Empty;
-        [Required]
+        //[Required]
         public string Description { get; set; } = string.Empty;
         public string? Image { get; set; }
 
-        [NotMapped]
-        public IFormFile? FormFile { get; set; }
+        //[NotMapped]
+        //public IFormFile? FormFile { get; set; }
     }
 }

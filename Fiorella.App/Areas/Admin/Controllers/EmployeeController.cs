@@ -39,6 +39,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Employee employee)
         {
+            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
 
             if (!ModelState.IsValid)
             {
@@ -61,7 +62,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 employee.Image = await employee.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/employee");
             }
 
-            employee.CreatedAt = DateTime.Now;
+            if (employee.PositionId == 0) employee.PositionId = null;
 
             await _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
@@ -119,10 +120,13 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 employee.Image = await updatedEmployee.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/employee");
             }
 
+            if (updatedEmployee.PositionId > 0)
+            {
+                employee.PositionId = updatedEmployee.PositionId;
+            }
+
             employee.FirstName = updatedEmployee.FirstName;
             employee.LastName = updatedEmployee.LastName;
-            employee.PositionId = updatedEmployee.PositionId;
-            employee.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

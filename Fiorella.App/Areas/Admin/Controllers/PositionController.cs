@@ -72,8 +72,6 @@ namespace Fiorella.App.Areas.Admin.Controllers
             }
 
             position.Name = updatedPosition.Name;
-            position.UpdatedAt = DateTime.Now;
-
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

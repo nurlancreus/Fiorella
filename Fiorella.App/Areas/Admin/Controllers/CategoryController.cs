@@ -1,4 +1,6 @@
-﻿using Fiorella.App.Context;
+﻿using AutoMapper;
+using Fiorella.App.Context;
+using Fiorella.App.Dtos.Category;
 using Fiorella.App.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +11,25 @@ namespace Fiorella.App.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly FiorellaDbContext _context;
+        private readonly IMapper _mapper;
 
-        public CategoryController(FiorellaDbContext context)
+        public CategoryController(FiorellaDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Category> categories = await _context.Categories.Where(x => !x.IsDeleted).ToListAsync();
+            //IEnumerable<Category> categories = await _context.Categories.Where(x => !x.IsDeleted).ToListAsync();
+
+            var query = _context.Categories.Where(c => !c.IsDeleted).AsQueryable();
+
+            ICollection<CategoryGetDto> categories = await query.Select(c => new CategoryGetDto()
+            {
+                Id = c.Id,
+                Name = c.Name
+            }).ToListAsync();
 
             return View(categories);
         }
@@ -29,18 +41,20 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category)
+        public async Task<IActionResult> Create(CategoryPostDto categoryDto)
         {
             if (!ModelState.IsValid)
             {
-                return View(category);
+                return View(categoryDto);
             }
 
-            if (await _context.Categories.AnyAsync(x => x.Name.Equals(category.Name, StringComparison.CurrentCultureIgnoreCase) && !x.IsDeleted))
+            if (await _context.Categories.AnyAsync(x => x.Name.Equals(categoryDto.Name, StringComparison.CurrentCultureIgnoreCase) && !x.IsDeleted))
             {
-                ModelState.AddModelError(nameof(category.Name), $"Category {category.Name} is already exist");
+                ModelState.AddModelError(nameof(categoryDto.Name), $"Category {categoryDto.Name} is already exist");
                 return View();
             }
+
+            Category category = _mapper.Map<Category>(categoryDto);
 
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
@@ -58,12 +72,13 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(category);
+            CategoryUpdateDto categoryDto = new() { Name = category.Name };
+            return View(categoryDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, Category updatedCategory)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromForm] CategoryUpdateDto updateCategoryDto)
         {
 
             Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
@@ -74,11 +89,10 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(category);
+                return View(updateCategoryDto);
             }
 
-            category.Name = updatedCategory.Name;
-            category.UpdatedAt = DateTime.Now;
+            category.Name = updateCategoryDto.Name;
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

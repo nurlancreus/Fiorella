@@ -10,8 +10,8 @@ namespace Fiorella.App.Models
         public string FirstName { get; set; } = string.Empty;
         [Required]
         public string LastName { get; set; } = string.Empty;
-        public string Image { get; set; } = string.Empty;
-        public int PositionId { get; set; }
+        public string? Image { get; set; } = string.Empty;
+        public int? PositionId { get; set; }
         public Position? Position { get; set; }
         [NotMapped]
         public IFormFile? FormFile { get; set; }

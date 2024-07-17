@@ -1,4 +1,8 @@
 using Fiorella.App.Context;
+using Fiorella.App.Dtos.Category;
+using Fiorella.App.Profiles;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -6,13 +10,15 @@ namespace Fiorella.App
 {
     public class Program
     {
+        [Obsolete]
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CategoryPostDto>());
+            builder.Services.AddAutoMapper(typeof(CategoryMapper));
             builder.Services.AddDbContext<FiorellaDbContext>(opt =>
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
