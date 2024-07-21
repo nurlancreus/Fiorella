@@ -23,13 +23,9 @@ namespace Fiorella.App.Areas.Admin.Controllers
         {
             //IEnumerable<Category> categories = await _context.Categories.Where(x => !x.IsDeleted).ToListAsync();
 
-            var query = _context.Categories.Where(c => !c.IsDeleted).AsQueryable();
+            var query = _context.Categories.Where(c => !c.IsDeleted);
 
-            ICollection<CategoryGetDto> categories = await query.Select(c => new CategoryGetDto()
-            {
-                Id = c.Id,
-                Name = c.Name
-            }).ToListAsync();
+            ICollection<CategoryGetDto> categories = await query.Select(c => _mapper.Map<CategoryGetDto>(c)).ToListAsync();
 
             return View(categories);
         }
@@ -48,7 +44,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return View(categoryDto);
             }
 
-            if (await _context.Categories.AnyAsync(x => x.Name.Equals(categoryDto.Name, StringComparison.CurrentCultureIgnoreCase) && !x.IsDeleted))
+            if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower() && !c.IsDeleted))
             {
                 ModelState.AddModelError(nameof(categoryDto.Name), $"Category {categoryDto.Name} is already exist");
                 return View();
@@ -72,13 +68,14 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            CategoryUpdateDto categoryDto = new() { Name = category.Name };
+            //CategoryUpdateDto categoryDto = new() { Name = category.Name };
+            CategoryUpdateDto categoryDto = _mapper.Map<CategoryUpdateDto>(category);
             return View(categoryDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromForm] CategoryUpdateDto updateCategoryDto)
+        public async Task<IActionResult> Update(int id, CategoryUpdateDto updateCategoryDto)
         {
 
             Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);

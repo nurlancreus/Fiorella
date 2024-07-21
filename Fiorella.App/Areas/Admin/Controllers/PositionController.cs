@@ -1,4 +1,6 @@
-﻿using Fiorella.App.Context;
+﻿using AutoMapper;
+using Fiorella.App.Context;
+using Fiorella.App.Dtos.Position;
 using Fiorella.App.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +11,19 @@ namespace Fiorella.App.Areas.Admin.Controllers
     [Area("admin")]
     public class PositionController : Controller
     {
-        public readonly FiorellaDbContext _context;
+        private readonly FiorellaDbContext _context;
+        private readonly IMapper _mapper;
 
-        public PositionController(FiorellaDbContext context)
+        public PositionController(FiorellaDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<IActionResult> Index()
         {
-            List<Position> positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
+            //List<Position> positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
+            var query = _context.Positions.Where(p => !p.IsDeleted);
+            List<PositionDto> positions = await query.Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();  
 
             return View(positions);
         }
@@ -30,12 +36,14 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Position position)
+        public async Task<IActionResult> Create(PositionDto positionDto)
         {
             if (!ModelState.IsValid)
             {
-                return View(position);
+                return View(positionDto);
             }
+
+            Position position = _mapper.Map<Position>(positionDto);
 
             await _context.Positions.AddAsync(position);
             await _context.SaveChangesAsync();
@@ -52,12 +60,14 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(position);
+            PositionDto positionDto = _mapper.Map<PositionDto>(position);
+
+            return View(positionDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, Position updatedPosition)
+        public async Task<IActionResult> Update(int id, PositionDto updatedPosition)
         {
             Position? position = await _context.Positions.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
 
@@ -68,7 +78,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(position);
+                return View(updatedPosition);
             }
 
             position.Name = updatedPosition.Name;

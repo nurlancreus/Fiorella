@@ -28,19 +28,14 @@ namespace Fiorella.App.Areas.Admin.Controllers
         {
             //ICollection<Blog> blogs = await _context.Blogs.Where(x => !x.IsDeleted).ToListAsync();
             var query = _context.Blogs.Where(b => !b.IsDeleted).AsQueryable();
-            ICollection<BlogGetDto> blogs = await query.Select(b => new BlogGetDto()
-            {
-                Id = b.Id,
-                Title = b.Title,
-                Description = b.Description,
-                Image = b.Image
-            }).ToListAsync();
+
+            List<BlogGetDto> blogs = await query.Select(b => _mapper.Map<BlogGetDto>(b)).ToListAsync();
 
             return View(blogs);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -50,7 +45,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(blogDto);
             }
 
             if (blogDto.FormFile != null)
@@ -88,11 +83,13 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            BlogUpdateDto blogDto = new()
-            {
-                Title = blog.Title,
-                Description = blog.Description,
-            };
+            //BlogUpdateDto blogDto = new()
+            //{
+            //    Title = blog.Title,
+            //    Description = blog.Description,
+            //};
+
+            BlogUpdateDto blogDto = _mapper.Map<BlogUpdateDto>(blog);
 
             if (blog.Image != null)
             {

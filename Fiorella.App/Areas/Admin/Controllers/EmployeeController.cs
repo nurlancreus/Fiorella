@@ -1,4 +1,7 @@
-﻿using Fiorella.App.Context;
+﻿using AutoMapper;
+using Fiorella.App.Context;
+using Fiorella.App.Dtos.Employee;
+using Fiorella.App.Dtos.Position;
 using Fiorella.App.Extensions;
 using Fiorella.App.Helpers;
 using Fiorella.App.Models;
@@ -12,18 +15,23 @@ namespace Fiorella.App.Areas.Admin.Controllers
     public class EmployeeController : Controller
     {
         private readonly FiorellaDbContext _context;
+        private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webEnv;
 
-        public EmployeeController(FiorellaDbContext context, IWebHostEnvironment _env)
+        public EmployeeController(FiorellaDbContext context, IWebHostEnvironment _env, IMapper mapper)
         {
             _context = context;
             _webEnv = _env;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<Employee> employees = await _context.Employees.Where(x => !x.IsDeleted).Include(e => e.Position).ToListAsync();
+            //List<Employee> employees = await _context.Employees.Where(x => !x.IsDeleted).Include(e => e.Position).ToListAsync();
+
+            var query = _context.Employees.Where(e => !e.IsDeleted);
+            List<EmployeeGetDto> employees = await query.Select(e => _mapper.Map<EmployeeGetDto>(e)).ToListAsync();
 
             return View(employees);
         }
@@ -31,39 +39,41 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
+            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee employee)
+        public async Task<IActionResult> Create(EmployeePostDto employeeDto)
         {
-            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
+            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
 
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(employeeDto);
             }
 
-            if (employee.FormFile != null)
+            if (employeeDto.FormFile != null)
             {
-                if (!Helper.IsImage(employee.FormFile))
-                {
-                    ModelState.AddModelError(nameof(employee.FormFile), "File type must be an image.");
-                    return View();
-                }
+                //if (!Helper.IsImage(employee.FormFile))
+                //{
+                //    ModelState.AddModelError(nameof(employee.FormFile), "File type must be an image.");
+                //    return View();
+                //}
 
-                if (!Helper.IsSizeOk(employee.FormFile, 1))
-                {
-                    ModelState.AddModelError(nameof(employee.FormFile), "File size must be less than 1 mbs.");
-                    return View();
-                }
-                employee.Image = await employee.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/employee");
+                //if (!Helper.IsSizeOk(employee.FormFile, 1))
+                //{
+                //    ModelState.AddModelError(nameof(employee.FormFile), "File size must be less than 1 mbs.");
+                //    return View();
+                //}
+                employeeDto.Image = await employeeDto.FormFile.SaveFileAsync(_webEnv.WebRootPath, "assets/images/employee");
             }
 
-            if (employee.PositionId == 0) employee.PositionId = null;
+            if (employeeDto.PositionId == 0) employeeDto.PositionId = null;
 
+            Employee employee = _mapper.Map<Employee>(employeeDto);
             await _context.Employees.AddAsync(employee);
             await _context.SaveChangesAsync();
 
@@ -81,12 +91,14 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return View(employee);
+            EmployeeUpdateDto employeeDto = _mapper.Map<EmployeeUpdateDto>(employee);
+
+            return View(employeeDto);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int id, Employee updatedEmployee)
+        public async Task<IActionResult> Update(int id, EmployeeUpdateDto updatedEmployee)
         {
             Employee? employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
 
@@ -97,22 +109,22 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(employee);
+                return View(updatedEmployee);
             }
 
             if (updatedEmployee.FormFile != null)
             {
-                if (!Helper.IsImage(updatedEmployee.FormFile))
-                {
-                    ModelState.AddModelError(nameof(employee.FormFile), "File type must be an image.");
-                    return View();
-                }
+                //if (!Helper.IsImage(updatedEmployee.FormFile))
+                //{
+                //    ModelState.AddModelError(nameof(employee.FormFile), "File type must be an image.");
+                //    return View();
+                //}
 
-                if (!Helper.IsSizeOk(updatedEmployee.FormFile, 1))
-                {
-                    ModelState.AddModelError(nameof(employee.FormFile), "File size must be less than 1 mbs.");
-                    return View();
-                }
+                //if (!Helper.IsSizeOk(updatedEmployee.FormFile, 1))
+                //{
+                //    ModelState.AddModelError(nameof(employee.FormFile), "File size must be less than 1 mbs.");
+                //    return View();
+                //}
 
                 if (employee.Image != null)
                     Helper.RemoveImage(_webEnv.WebRootPath, "assets/images/employee", employee.Image);
