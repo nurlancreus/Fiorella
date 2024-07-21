@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\Admin\Models\" />
     <Folder Include="wwwroot\assets\images\blog\" />
     <Folder Include="wwwroot\assets\images\employee\" />
   </ItemGroup>
