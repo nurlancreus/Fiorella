@@ -1,7 +1,7 @@
-﻿@model Position
+﻿@model PositionDto
 
 <div class="container">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         <div class="mb-3">
             <label asp-for="@Model.Name" class="form-label">Name</label>
             <input type="text" class="form-control" asp-for="@Model.Name">

@@ -38,7 +38,7 @@
             <span asp-validation-for="FormFile" class="text text-danger"></span>
         </div>
         <div style="width:100px">
-            <img style="width:100%" src="~/assets/images/blog/@(Model.Image ?? "default-img.jpg")" alt="blog image" />
+            <img style="width:100%" src="~/assets/images/blog/@(Model?.Image ?? "default-img.jpg")" alt="blog image" />
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
         @Html.AntiForgeryToken()
