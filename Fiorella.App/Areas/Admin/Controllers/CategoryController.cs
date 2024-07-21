@@ -46,7 +46,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower() && !c.IsDeleted))
             {
-                ModelState.AddModelError(nameof(categoryDto.Name), $"Category {categoryDto.Name} is already exist");
+                ModelState.AddModelError(nameof(categoryDto.Name), $"Category {categoryDto.Name.ToLower()} is already exist");
                 return View();
             }
 
@@ -62,7 +62,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id)
         {
 
-            Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            Category? category = await _context.Categories.FirstOrDefaultAsync(c => !c.IsDeleted && c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -78,7 +78,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id, CategoryUpdateDto updateCategoryDto)
         {
 
-            Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            Category? category = await _context.Categories.FirstOrDefaultAsync(c => !c.IsDeleted && c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -98,7 +98,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            Category? category = await _context.Categories.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            Category? category = await _context.Categories.FirstOrDefaultAsync(c => !c.IsDeleted && c.Id == id);
 
             if (category == null)
             {

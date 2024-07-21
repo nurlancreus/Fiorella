@@ -1,8 +1,7 @@
-﻿using Fiorella.App.Dtos.Category;
-using Fiorella.App.Dtos.Tag;
+﻿using Fiorella.App.Dtos.Tag;
 using FluentValidation;
 
-namespace Fiorella.App.Validators.Category
+namespace Fiorella.App.Validators.Tag
 {
     public class TagPostDtoValidator : AbstractValidator<TagPostDto>
 

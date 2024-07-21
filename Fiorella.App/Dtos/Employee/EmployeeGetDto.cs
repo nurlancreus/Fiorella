@@ -9,8 +9,6 @@ namespace Fiorella.App.Dtos.Employee
         public string LastName { get; set; } = string.Empty;
         public string? Image { get; set; } = "default-avatar.jpg";
         public PositionDto? Position { get; set; }
-        public IFormFile? FormFile { get; set; }
-
         public string FullName => $"{FirstName} {LastName}";
     }
 }

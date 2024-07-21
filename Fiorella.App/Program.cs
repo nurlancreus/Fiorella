@@ -17,7 +17,7 @@ namespace Fiorella.App
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CategoryPostDtoValidator>());
+            builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TagPostDtoValidator>());
             builder.Services.AddAutoMapper(typeof(CategoryProfile));
             builder.Services.AddDbContext<FiorellaDbContext>(opt =>
             {

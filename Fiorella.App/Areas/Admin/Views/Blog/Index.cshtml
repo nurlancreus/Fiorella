@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<BlogGetDto>
 
 <div class="container">
+    <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -36,5 +37,6 @@
             }
         </tbody>
     </table>
+    </div>
     <a asp-area="admin" asp-controller="Blog" asp-action="Create" class="btn btn-success">Create Blog</a>
 </div>

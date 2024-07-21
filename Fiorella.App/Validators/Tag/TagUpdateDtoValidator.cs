@@ -1,13 +1,11 @@
-﻿using Fiorella.App.Dtos.Category;
-using Fiorella.App.Dtos.Tag;
+﻿using Fiorella.App.Dtos.Tag;
 using FluentValidation;
 
-namespace Fiorella.App.Validators.Category
+namespace Fiorella.App.Validators.Tag
 {
-    public class TagPostDtoValidator : AbstractValidator<TagPostDto>
-
+    public class TagUpdateDtoValidator : AbstractValidator<TagUpdateDto>
     {
-        public TagPostDtoValidator()
+        public TagUpdateDtoValidator()
         {
             RuleFor(c => c.Name).NotNull().WithMessage("Name can not be null.")
                 .NotEmpty().WithMessage("Name can not be emplty.")
