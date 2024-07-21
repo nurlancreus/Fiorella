@@ -40,17 +40,33 @@
                                                                  class="fas fa-chevron-down"></i>
                     <div class="mdcategories" style="max-width:min-content;">
                         <span id="firstfilter" data-id="all">ALL</span>
-                        @foreach (var item in Model.Categories)
+                        @if (Model.Categories.Count == 0)
                         {
-                            <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
+                            <h3>There is no Category</h3>
+                        }
+                        else
+                        {
+
+                            @foreach (var item in Model.Categories)
+                            {
+                                <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
+                            }
                         }
                     </div>
                 </div>
                 <div class="filters col-lg-10  ">
                     <span id="firstfilter" data-id="all">ALL</span>
-                    @foreach (var item in Model.Categories)
+                    @if (Model.Categories.Count == 0)
                     {
-                        <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
+                        <h3>There is no Category</h3>
+                    }
+                    else
+                    {
+
+                        @foreach (var item in Model.Categories)
+                        {
+                            <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
+                        }
                     }
 
                 </div>
@@ -297,22 +313,31 @@
         </div>
         <div class="row">
             <div class="experts">
-                @foreach (var employee in Model.Employees)
+                @if (Model.Categories.Count == 0)
+                {
+                    <h3>There is no Experts</h3>
+                }
+                else
                 {
 
-                    <div class="expert col-md-6 col-12 col-lg-3">
-                        <div class="photo" style="border-radius: 100vw; width: 250px; height: 200px; overflow: hidden">
-                            <img src="~/assets/images/employee/@(employee.Image ?? "default-img.jpg")"
-                                 alt="" style="object-fit: cover; width: 100%; height: 100%">
+                    @foreach (var employee in Model.Employees)
+                    {
+
+                        <div class="expert col-md-6 col-12 col-lg-3">
+                            <div class="photo" style="border-radius: 100vw; width: 250px; height: 200px; overflow: hidden">
+                                <img src="~/assets/images/employee/@(employee.Image)"
+                                     alt="" style="object-fit: cover; width: 100%; height: 100%">
+                            </div>
+                            <div class="name">
+                                <p>@employee.FirstName @employee.LastName</p>
+                            </div>
+                            <div class="job">
+                                <p>@employee.Position?.Name</p>
+                            </div>
                         </div>
-                        <div class="name">
-                            <p>@employee.FirstName @employee.LastName</p>
-                        </div>
-                        <div class="job">
-                            <p>@employee.Position?.Name</p>
-                        </div>
-                    </div>
+                    }
                 }
+
             </div>
         </div>
     </div>
@@ -354,14 +379,18 @@
             </div>
         </div>
         <div class="row">
-            @if (Model.Blogs != null)
+            @if (Model.Categories.Count == 0)
+            {
+                <h3>There is no Blogs</h3>
+            }
+            else
             {
                 @foreach (var blog in Model.Blogs)
                 {
 
                     <div class="blog col-lg-4">
                         <div class="image">
-                            <img src="~/assets/images/blog/@(blog.Image ?? "default-img.jpg")"
+                            <img src="~/assets/images/blog/@(blog.Image)"
                                  alt="">
                             <span class="badge bg-light text-dark">@blog.CreatedAt.ToString("mm dd yyyy")</span>
                         </div>

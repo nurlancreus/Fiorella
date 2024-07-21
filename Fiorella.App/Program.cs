@@ -1,5 +1,5 @@
 using Fiorella.App.Context;
-using Fiorella.App.Dtos.Category;
+using Fiorella.App.Validators.Category;
 using Fiorella.App.Profiles;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -17,8 +17,8 @@ namespace Fiorella.App
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CategoryPostDto>());
-            builder.Services.AddAutoMapper(typeof(CategoryMapper));
+            builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CategoryPostDtoValidator>());
+            builder.Services.AddAutoMapper(typeof(CategoryProfile));
             builder.Services.AddDbContext<FiorellaDbContext>(opt =>
             {
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
