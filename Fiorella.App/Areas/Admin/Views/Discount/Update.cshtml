@@ -1,0 +1,22 @@
+﻿@model DiscountPostDto
+<div class="container">
+    <form method="post">
+        <div class="mb-3">
+            <label asp-for="@Model.Percent" class="form-label">Percent</label>
+            <input type="text" class="form-control" asp-for="@Model.Percent">
+            <span asp-validation-for="@Model.Percent" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.StartDate" class="form-label">Start Date</label>
+            <input type="date" class="form-control" asp-for="@Model.StartDate">
+            <span asp-validation-for="@Model.StartDate" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.EndDate" class="form-label">End Date</label>
+            <input type="date" class="form-control" asp-for="@Model.EndDate">
+            <span asp-validation-for="@Model.EndDate" class="text text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        @Html.AntiForgeryToken()
+    </form>
+</div>

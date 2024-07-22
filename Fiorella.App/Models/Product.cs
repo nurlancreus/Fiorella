@@ -19,7 +19,7 @@ namespace Fiorella.App.Models
         public string Description { get; set; } = string.Empty;
         public decimal Weight { get; set; }
         public string Dimensions { get; set; } = string.Empty;
-
+        public Discount Discount { get; set; }
         public ICollection<ProductImage> Images { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public ICollection<ProductTag> ProductTags { get; set; }

@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Fiorella.App.Context
 {
-    public class FiorellaDbContext : DbContext
+    public class FiorellaDbContext(DbContextOptions<FiorellaDbContext> options) : DbContext(options)
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
@@ -15,9 +15,7 @@ namespace Fiorella.App.Context
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        public FiorellaDbContext(DbContextOptions<FiorellaDbContext> options) : base(options)
-        {
-        }
+        public DbSet<Discount> Discounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

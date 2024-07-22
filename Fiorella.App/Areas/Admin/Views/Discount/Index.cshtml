@@ -1,0 +1,41 @@
+﻿@model IEnumerable<DiscountGetDto>
+
+<div class="container">
+    <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Percent</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.Id</th>
+                        <td>@item.Percent</td>
+                        <td>@(item.StartDate?.ToString("dd mm yyyy") ?? "Not Defined")</td>
+                        <td>@(item.EndDate?.ToString("dd mm yyyy") ?? "Not Defined")</td>
+                        <td>@item.Percent</td>
+                        <td>
+                            <a asp-area="admin" asp-controller="Discount" asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary">
+                                <i class="far fa-pen-to-square"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="admin" asp-controller="Discount" asp-action="Remove" asp-route-id="@item.Id" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <a asp-area="admin" asp-controller="Discount" asp-action="Create" class="btn btn-success">Create Discount</a>
+</div>
