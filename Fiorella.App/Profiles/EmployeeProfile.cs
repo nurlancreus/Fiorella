@@ -11,7 +11,6 @@ namespace Fiorella.App.Profiles
         {
             CreateMap<EmployeePostDto, Employee>().ReverseMap();
             CreateMap<EmployeeUpdateDto, Employee>().ReverseMap();
-            //CreateMap<Employee, EmployeeGetDto>();
 
             // this will skip the image property if it's null or empty
             CreateMap<Employee, EmployeeGetDto>()

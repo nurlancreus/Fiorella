@@ -1,0 +1,59 @@
+﻿@model ProductPostDto
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="@Model.Name" class="form-label">Name</label>
+            <input type="text" class="form-control" asp-for="@Model.Name">
+            <span asp-validation-for="@Model.Name" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Price" class="form-label">Price</label>
+            <input type="text" class="form-control" asp-for="@Model.Description">
+            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Info" class="form-label">Description</label>
+            <input type="text" class="form-control" asp-for="@Model.Description">
+            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Description" class="form-label">Description</label>
+            <input type="text" class="form-control" asp-for="@Model.Description">
+            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.CategoryIds" class="form-label">Categories</label>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <input type="checkbox" asp-for="@Model.CategoryIds" />
+            }
+            <span asp-validation-for="@Model.CategoryIds" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.TagIds" class="form-label">Tags</label>
+            @foreach (var tag in ViewBag.Tags)
+            {
+                <input type="checkbox" asp-for="@Model.TagIds" />
+            }
+            <span asp-validation-for="@Model.CategoryIds" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Weight" class="form-label">Weight</label>
+            <input type="text" class="form-control" asp-for="@Model.Weight">
+            <span asp-validation-for="@Model.Weight" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Dimensions" class="form-label">Dimension</label>
+            <input type="text" class="form-control" asp-for="@Model.Dimensions">
+            <span asp-validation-for="@Model.Dimensions" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.FormFiles" class="form-label">Image</label>
+            <input type="file" multiple accept="image/*" class="form-control" asp-for="@Model.FormFiles">
+            <span asp-validation-for="@Model.FormFiles class=" text text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        @Html.AntiForgeryToken()
+    </form>
+</div>

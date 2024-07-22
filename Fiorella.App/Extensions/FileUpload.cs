@@ -19,6 +19,22 @@ namespace Fiorella.App.Extensions
             return fileName;
         }
 
+        public static async Task<ICollection<string>> SaveMultipleFileAsync(this ICollection<IFormFile> multipleFormFiles, string root, string path)
+        {
+            ICollection<string> fileNames = [];
+            foreach (var file in multipleFormFiles)
+            {
+
+                if (file.Length > 0)
+                {
+                    string fileName = await file.SaveFileAsync(root, path);
+                    fileNames.Add(fileName);
+                }
+            }
+
+            return fileNames;
+        }
+
         public static bool IsImage(this IFormFile formFile)
         {
             return formFile.ContentType.Contains("image");

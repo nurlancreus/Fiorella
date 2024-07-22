@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ProductGetDto>
+
+<div class="container">
+    <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Info</th>
+                    <th scope="col">Tags</th>
+                    <th scope="col">Categories</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Update</th>
+                    <th scope="col">Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.Id</th>
+                        <td>@item.Name</td>
+                        <td>@item.Price</td>
+                        <td>@item.Info</td>
+                        <td>@string.Join(", ", item.Tags.Take(3))</td>
+                        <td>@string.Join(", ", item.Categories.Take(3))</td>
+                        <td>
+                            <img src="~/assets/images/Product/@item.Images.FirstOrDefault(i => i.IsMain)?.Url" alt="Product image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" />
+                        </td>
+                        <td>
+                            <a asp-area="admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary">
+                                <i class="far fa-pen-to-square"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a asp-area="admin" asp-controller="Product" asp-action="Remove" asp-route-id="@item.Id" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <a asp-area="admin" asp-controller="Product" asp-action="Create" class="btn btn-success">Create Product</a>
+</div>
