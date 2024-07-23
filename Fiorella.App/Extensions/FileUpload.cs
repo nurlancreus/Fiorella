@@ -51,7 +51,7 @@ namespace Fiorella.App.Extensions
         {
             permittedExtensions ??= [".jpg", ".png", ".gif"];
 
-            var extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
+            string extension = Path.GetExtension(formFile.FileName).ToLowerInvariant();
             return !string.IsNullOrEmpty(extension) && permittedExtensions.Contains(extension);
 
         }
@@ -60,7 +60,7 @@ namespace Fiorella.App.Extensions
         {
             permittedMimeTypes ??= ["image/jpeg", "image/png", "image/gif"];
 
-            var mimeType = formFile.ContentType;
+            string mimeType = formFile.ContentType;
             return permittedMimeTypes.Contains(mimeType);
 
         }
