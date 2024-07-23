@@ -37,22 +37,24 @@ namespace Fiorella.App.Validators.Product
             RuleFor(p => p)
                 .Must(DiscountLessThanPrice).WithMessage("Discount must be less than the price.");
 
-            //RuleFor(p => p.FormFiles).Custom((file, context) =>
-            //{
-            //    if (file != null)
-            //    {
+            RuleFor(p => p.FormFiles).Custom((files, context) =>
+            {
+                if (files != null)
+                {
+                    foreach (IFormFile file in files)
+                    {
+                        if (!file.IsSizeOk(1))
+                        {
+                            context.AddFailure("File must be less than 1 mb.");
+                        }
 
-            //        if (!file.IsSizeOk(1))
-            //        {
-            //            context.AddFailure("File must be less than 1 mb.");
-            //        }
-
-            //        if (!file.RestrictMimeTypes())
-            //        {
-            //            context.AddFailure("File must be an image.");
-            //        }
-            //    }
-            //});
+                        if (!file.RestrictMimeTypes())
+                        {
+                            context.AddFailure("File must be an image.");
+                        }
+                    }
+                }
+            });
         }
 
         private static bool BeAValidDiscount(int? discountId)

@@ -1,5 +1,7 @@
-﻿using Fiorella.App.Dtos.Discount;
+﻿using Fiorella.App.Dtos.Category;
+using Fiorella.App.Dtos.Discount;
 using Fiorella.App.Dtos.ProductImage;
+using Fiorella.App.Dtos.Tag;
 using Fiorella.App.Models;
 
 namespace Fiorella.App.Dtos.Product
@@ -8,6 +10,12 @@ namespace Fiorella.App.Dtos.Product
     {
         public ProductPostDto()
         {
+            TagIds = new HashSet<int>();
+            CategoryIds = new HashSet<int>();
+
+            ProductCategories = new HashSet<ProductCategory>();
+            ProductTags = new HashSet<ProductTag>();
+
             Images = new HashSet<ProductImagePostDto>();
         }
         public string Name { get; set; } = string.Empty;
@@ -19,6 +27,10 @@ namespace Fiorella.App.Dtos.Product
         public string Dimensions { get; set; } = string.Empty;
         public ICollection<int> TagIds { get; set; }
         public ICollection<int> CategoryIds { get; set; }
+        //public ICollection<TagPostDto> Tags { get; set; }
+        //public ICollection<CategoryPostDto> Categories { get; set; }
+        public ICollection<ProductCategory> ProductCategories { get; set; }
+        public ICollection<ProductTag> ProductTags { get; set; }
         public ICollection<IFormFile>? FormFiles { get; set; }
         public ICollection<ProductImagePostDto> Images { get; set; }
 

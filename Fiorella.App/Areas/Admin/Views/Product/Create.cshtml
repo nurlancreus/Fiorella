@@ -1,59 +1,64 @@
 ﻿@model ProductPostDto
 
 <div class="container">
-    <form method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label asp-for="@Model.Name" class="form-label">Name</label>
-            <input type="text" class="form-control" asp-for="@Model.Name">
-            <span asp-validation-for="@Model.Name" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Price" class="form-label">Price</label>
-            <input type="text" class="form-control" asp-for="@Model.Description">
-            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Info" class="form-label">Description</label>
-            <input type="text" class="form-control" asp-for="@Model.Description">
-            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Description" class="form-label">Description</label>
-            <input type="text" class="form-control" asp-for="@Model.Description">
-            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.CategoryIds" class="form-label">Categories</label>
-            @foreach (var category in ViewBag.Categories)
-            {
-                <input type="checkbox" asp-for="@Model.CategoryIds" />
-            }
-            <span asp-validation-for="@Model.CategoryIds" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.TagIds" class="form-label">Tags</label>
-            @foreach (var tag in ViewBag.Tags)
-            {
-                <input type="checkbox" asp-for="@Model.TagIds" />
-            }
-            <span asp-validation-for="@Model.CategoryIds" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Weight" class="form-label">Weight</label>
-            <input type="text" class="form-control" asp-for="@Model.Weight">
-            <span asp-validation-for="@Model.Weight" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Dimensions" class="form-label">Dimension</label>
-            <input type="text" class="form-control" asp-for="@Model.Dimensions">
-            <span asp-validation-for="@Model.Dimensions" class="text text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.FormFiles" class="form-label">Image</label>
-            <input type="file" multiple accept="image/*" class="form-control" asp-for="@Model.FormFiles">
-            <span asp-validation-for="@Model.FormFiles class=" text text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary">Create</button>
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
         @Html.AntiForgeryToken()
-    </form>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Name, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Price, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Info, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Info, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Info, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.CategoryIds, "Categories", new { @class = "form-label" })
+            @Html.ListBoxFor(m => m.CategoryIds, new MultiSelectList(ViewBag.Categories, "Id", "Name"), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CategoryIds, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.TagIds, "Tags", new { @class = "form-label" })
+            @Html.ListBoxFor(m => m.TagIds, new MultiSelectList(ViewBag.Tags, "Id", "Name"), new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.TagIds, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.DiscountId, "Discount", new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.DiscountId, new SelectList(ViewBag.Discounts, "Id", "Name"), "Select Discount", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.DiscountId, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Weight, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Weight, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Dimensions, new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Dimensions, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Dimensions, "", new { @class = "text text-danger" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.FormFiles, new { @class = "form-label" })
+            <input type="file" multiple accept="image/*" class="form-control" asp-for="@Model.FormFiles">
+            @Html.ValidationMessageFor(m => m.FormFiles, "", new { @class = "text text-danger" })
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+    }
 </div>

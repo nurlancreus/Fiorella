@@ -24,8 +24,8 @@
                         <td>@item.Name</td>
                         <td>@item.Price</td>
                         <td>@item.Info</td>
-                        <td>@string.Join(", ", item.Tags.Take(3))</td>
-                        <td>@string.Join(", ", item.Categories.Take(3))</td>
+                        <td>@string.Join(", ", item.Tags.Select(c => c.Name).Take(3))</td>
+                        <td>@string.Join(", ", item.Categories.Select(c => c.Name).Take(3))</td>
                         <td>
                             <img src="~/assets/images/Product/@item.Images.FirstOrDefault(i => i.IsMain)?.Url" alt="Product image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" />
                         </td>

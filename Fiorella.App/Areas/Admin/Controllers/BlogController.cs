@@ -27,7 +27,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             //ICollection<Blog> blogs = await _context.Blogs.Where(x => !x.IsDeleted).ToListAsync();
-            var query = _context.Blogs.Where(b => !b.IsDeleted).AsQueryable();
+            var query = _context.Blogs.Where(b => !b.IsDeleted);
 
             List<BlogGetDto> blogs = await query.Select(b => _mapper.Map<BlogGetDto>(b)).ToListAsync();
 
