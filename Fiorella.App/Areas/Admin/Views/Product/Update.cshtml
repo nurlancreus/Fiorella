@@ -66,6 +66,28 @@
             <span asp-validation-for="@Model.FormFiles" class="text text-danger"></span>
         </div>
 
+        <div class="mb-3">
+            @{
+                if (Model.Images.Count > 0)
+                {
+                    <div class="image-container d-flex gap-2">
+                        @foreach (var image in Model.Images)
+                        {
+                            var imageClass = image.IsMain ? "border border-danger" : "";
+
+                            <div class="image @(imageClass)" data-id="@image.Id" style="cursor: pointer; width: 200px; max-height: 250px;">
+                                <img style="width: 100%" src="~/assets/images/product/@(image.Url)" alt="Product Image" />
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p>There is no image in this product!</p>
+                }
+            }
+        </div>
+
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
 </div>

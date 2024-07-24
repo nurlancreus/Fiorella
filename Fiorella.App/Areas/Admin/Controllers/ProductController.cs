@@ -196,6 +196,31 @@ namespace Fiorella.App.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateMainImage([FromBody] int mainImageId)
+        {
+            ProductImage? mainImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.IsMain == true);
+
+            if (mainImage == null)
+            {
+                return NotFound();
+            }
+
+            ProductImage? productImage = await _context.ProductImages.FindAsync(mainImageId);
+
+            if (productImage == null)
+            {
+                return NotFound();
+            }
+
+            mainImage.IsMain = false;
+            productImage.IsMain = true;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Update));
+        }
+
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
