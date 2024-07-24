@@ -30,8 +30,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         {
             //List<Employee> employees = await _context.Employees.Where(x => !x.IsDeleted).Include(e => e.Position).ToListAsync();
 
-            var query = _context.Employees.Where(e => !e.IsDeleted);
-            List<EmployeeGetDto> employees = await query.Select(e => _mapper.Map<EmployeeGetDto>(e)).ToListAsync();
+            List<EmployeeGetDto> employees = await _context.Employees.Select(e => _mapper.Map<EmployeeGetDto>(e)).ToListAsync();
 
             return View(employees);
         }
@@ -39,7 +38,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
+            ViewBag.Positions = await _context.Positions.Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
 
             return View();
         }
@@ -51,7 +50,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
+                ViewBag.Positions = await _context.Positions.Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
                 return View(employeeDto);
             }
 
@@ -83,13 +82,14 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
-            Employee? employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            Employee? employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
 
             if (employee == null)
             {
                 return NotFound();
             }
+
+            ViewBag.Positions = await _context.Positions.Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
 
             EmployeeUpdateDto employeeDto = _mapper.Map<EmployeeUpdateDto>(employee);
 
@@ -100,7 +100,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, EmployeeUpdateDto updatedEmployee)
         {
-            Employee? employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            Employee? employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
 
             if (employee == null)
             {
@@ -109,7 +109,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
+                ViewBag.Positions = await _context.Positions.Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
                 return View(updatedEmployee);
             }
 
@@ -148,7 +148,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            Employee? employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            Employee? employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
 
             if (employee == null)
             {

@@ -11,25 +11,26 @@ namespace Fiorella.App.Validators.Product
             RuleFor(p => p.Name)
                 .NotNull().WithMessage("Name cannot be null.")
                 .NotEmpty().WithMessage("Name cannot be empty.")
-                .MaximumLength(100).WithMessage("Name cannot exceed 100 characters.");
+                .MaximumLength(50).WithMessage("Name cannot exceed 50 characters.");
 
             RuleFor(p => p.Price)
                 .GreaterThan(0).WithMessage("Price must be greater than 0.");
 
             RuleFor(p => p.Info)
-                .MaximumLength(500).WithMessage("Info cannot exceed 500 characters.");
+                .MaximumLength(250).WithMessage("Info cannot exceed 250 characters.");
 
             RuleFor(p => p.TitleDescription)
-                .MaximumLength(200).WithMessage("TitleDescription cannot exceed 200 characters.");
+                .MaximumLength(50).WithMessage("TitleDescription cannot exceed 50 characters.");
 
             RuleFor(p => p.Description)
-                .MaximumLength(1000).WithMessage("Description cannot exceed 1000 characters.");
+                .MaximumLength(500).WithMessage("Description cannot exceed 500 characters.");
 
             RuleFor(p => p.Weight)
                 .GreaterThan(0).WithMessage("Weight must be greater than 0.");
 
             RuleFor(p => p.Dimensions)
-                .MaximumLength(50).WithMessage("Dimensions cannot exceed 50 characters.");
+                        .MaximumLength(50).WithMessage("Dimensions cannot exceed 50 characters.")
+                        .Matches(@"^\d+ x \d+$").WithMessage("Dimensions must be in the format 'num1 x num2'.");
 
             RuleFor(p => p.DiscountId)
                 .Must(BeAValidDiscount).When(p => p.DiscountId.HasValue).WithMessage("Invalid Discount ID.");

@@ -8,11 +8,6 @@ namespace Fiorella.App.Dtos.Product
 {
     public record ProductGetDto
     {
-        public ProductGetDto()
-        {
-            Images = new HashSet<ProductImageGetDto>();
-
-        }
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public double Price { get; set; }
@@ -21,9 +16,9 @@ namespace Fiorella.App.Dtos.Product
         public string Dimensions { get; set; } = string.Empty;
         public int? DiscountId { get; set; }
         public DiscountGetDto? Discount { get; set; }
-        public ICollection<ProductImageGetDto> Images { get; set; }
-        public ICollection<TagGetDto> Tags { get; set; }
-        public ICollection<CategoryGetDto> Categories { get; set; }
+        public ICollection<ProductImageGetDto> Images { get; set; } = [];
+        public ICollection<TagGetDto> Tags { get; set; } = [];
+        public ICollection<CategoryGetDto> Categories { get; set; } = [];
 
     }
 }

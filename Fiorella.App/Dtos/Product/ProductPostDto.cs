@@ -27,14 +27,12 @@ namespace Fiorella.App.Dtos.Product
         public string Dimensions { get; set; } = string.Empty;
         public ICollection<int> TagIds { get; set; }
         public ICollection<int> CategoryIds { get; set; }
-        //public ICollection<TagPostDto> Tags { get; set; }
-        //public ICollection<CategoryPostDto> Categories { get; set; }
         public ICollection<ProductCategory> ProductCategories { get; set; }
         public ICollection<ProductTag> ProductTags { get; set; }
         public ICollection<IFormFile>? FormFiles { get; set; }
         public ICollection<ProductImagePostDto> Images { get; set; }
 
         public int? DiscountId { get; set; }
-        public DiscountGetDto? Discount { get; set; }
+        public DiscountPostDto? Discount { get; set; }
     }
 }

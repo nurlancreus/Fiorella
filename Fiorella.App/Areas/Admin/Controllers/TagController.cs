@@ -21,9 +21,8 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var query = _context.Tags.Where(t => !t.IsDeleted);
 
-            List<TagGetDto> tags = await query.Select(t => _mapper.Map<TagGetDto>(t)).ToListAsync();
+            List<TagGetDto> tags = await _context.Tags.Select(t => _mapper.Map<TagGetDto>(t)).ToListAsync();
 
             return View(tags);
         }
@@ -42,7 +41,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return View(tagDto);
             }
 
-            if (await _context.Tags.AnyAsync(t => t.Name.ToLower() == tagDto.Name.ToLower() && !t.IsDeleted))
+            if (await _context.Tags.AnyAsync(t => t.Name.ToLower() == tagDto.Name.ToLower()))
             {
                 ModelState.AddModelError(nameof(tagDto.Name), $"Tag {tagDto.Name.ToLower()} is already exist");
                 return View();
@@ -60,7 +59,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id)
         {
 
-            Tag? tag = await _context.Tags.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            Tag? tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == id);
             if (tag == null)
             {
                 return NotFound();
@@ -75,7 +74,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id, TagUpdateDto updateTagDto)
         {
 
-            Tag? tag = await _context.Tags.FirstOrDefaultAsync(t => !t.IsDeleted && t.Id == id);
+            Tag? tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == id);
             if (tag == null)
             {
                 return NotFound();
@@ -95,7 +94,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            Tag? tag = await _context.Tags.FirstOrDefaultAsync(t => !t.IsDeleted && t.Id == id);
+            Tag? tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == id);
 
             if (tag == null)
             {

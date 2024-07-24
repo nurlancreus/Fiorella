@@ -1,64 +1,71 @@
 ﻿@model ProductPostDto
+@{
+    ViewBag.Title = "Create Product";
+    var Categories = new MultiSelectList(ViewBag.Categories, "Id", "Name");
+    var Tags = new MultiSelectList(ViewBag.Tags, "Id", "Name");
+    var Discounts = new SelectList(ViewBag.Discounts, "Id", "Percent");
+}
 
 <div class="container">
-    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        @Html.AntiForgeryToken()
+    <form asp-action="Create" asp-controller="Product" asp-antiforgery="true" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.Name, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.Name" class="form-label"></label>
+            <input asp-for="@Model.Name" class="form-control" />
+            <span asp-validation-for="@Model.Name" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.Price, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Price, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Price, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.Price" class="form-label"></label>
+            <input asp-for="@Model.Price" class="form-control" />
+            <span asp-validation-for="@Model.Price" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.Info, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Info, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Info, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.Info" class="form-label"></label>
+            <textarea asp-for="@Model.Info" class="form-control" style="resize:none" ></textarea>
+            <span asp-validation-for="@Model.Info" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.CategoryIds, "Categories", new { @class = "form-label" })
-            @Html.ListBoxFor(m => m.CategoryIds, new MultiSelectList(ViewBag.Categories, "Id", "Name"), new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.CategoryIds, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.CategoryIds" class="form-label">Categories</label>
+            <select asp-for="@Model.CategoryIds" asp-items="Categories" class="form-control" multiple></select>
+            <span asp-validation-for="@Model.CategoryIds" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.TagIds, "Tags", new { @class = "form-label" })
-            @Html.ListBoxFor(m => m.TagIds, new MultiSelectList(ViewBag.Tags, "Id", "Name"), new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.TagIds, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.TagIds" class="form-label">Tags</label>
+            <select asp-for="@Model.TagIds" asp-items="Tags" class="form-control" multiple></select>
+            <span asp-validation-for="@Model.TagIds" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.DiscountId, "Discount", new { @class = "form-label" })
-            @Html.DropDownListFor(m => m.DiscountId, new SelectList(ViewBag.Discounts, "Id", "Name"), "Select Discount", new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.DiscountId, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.DiscountId" class="form-label">Discount</label>
+            <select asp-for="@Model.DiscountId" asp-items="Discounts" class="form-control">
+                <option value="">Select Discount</option>
+            </select>
+            <span asp-validation-for="@Model.DiscountId" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.Weight, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Weight, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.Weight" class="form-label"></label>
+            <input asp-for="@Model.Weight" class="form-control" />
+            <span asp-validation-for="@Model.Weight" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.Dimensions, new { @class = "form-label" })
-            @Html.TextBoxFor(m => m.Dimensions, new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.Dimensions, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.Dimensions" class="form-label"></label>
+            <input asp-for="@Model.Dimensions" class="form-control" placeholder="format: num1 x num2" />
+            <span asp-validation-for="@Model.Dimensions" class="text text-danger"></span>
         </div>
 
         <div class="mb-3">
-            @Html.LabelFor(m => m.FormFiles, new { @class = "form-label" })
-            <input type="file" multiple accept="image/*" class="form-control" asp-for="@Model.FormFiles">
-            @Html.ValidationMessageFor(m => m.FormFiles, "", new { @class = "text text-danger" })
+            <label asp-for="@Model.FormFiles" class="form-label"></label>
+            <input asp-for="@Model.FormFiles" type="file" class="form-control" multiple accept="image/*" />
+            <span asp-validation-for="@Model.FormFiles" class="text text-danger"></span>
         </div>
 
         <button type="submit" class="btn btn-primary">Create</button>
-    }
+    </form>
 </div>

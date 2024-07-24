@@ -27,9 +27,8 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             //ICollection<Blog> blogs = await _context.Blogs.Where(x => !x.IsDeleted).ToListAsync();
-            var query = _context.Blogs.Where(b => !b.IsDeleted);
 
-            List<BlogGetDto> blogs = await query.Select(b => _mapper.Map<BlogGetDto>(b)).ToListAsync();
+            List<BlogGetDto> blogs = await _context.Blogs.Select(b => _mapper.Map<BlogGetDto>(b)).ToListAsync();
 
             return View(blogs);
         }
@@ -41,6 +40,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(BlogPostDto blogDto)
         {
             if (!ModelState.IsValid)
@@ -76,7 +76,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
-            Blog? blog = await _context.Blogs.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            Blog? blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == id);
 
             if (blog == null)
             {
@@ -91,10 +91,10 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             BlogUpdateDto blogDto = _mapper.Map<BlogUpdateDto>(blog);
 
-            if (blog.Image != null)
-            {
-                blogDto.Image = blog.Image;
-            }
+            //if (blog.Image != null)
+            //{
+            //    blogDto.Image = blog.Image;
+            //}
 
             return View(blogDto);
         }
@@ -104,7 +104,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id, BlogUpdateDto updatedBlog)
         {
 
-            Blog? blog = await _context.Blogs.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            Blog? blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == id);
 
             if (blog == null)
             {
@@ -146,7 +146,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            Blog? blog = await _context.Blogs.FirstOrDefaultAsync(x => !x.IsDeleted && x.Id == id);
+            Blog? blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == id);
 
             if (blog == null)
             {

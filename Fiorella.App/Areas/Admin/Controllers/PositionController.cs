@@ -22,8 +22,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             //List<Position> positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
-            var query = _context.Positions.Where(p => !p.IsDeleted);
-            List<PositionDto> positions = await query.Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();  
+            List<PositionDto> positions = await _context.Positions.Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();  
 
             return View(positions);
         }
@@ -53,7 +52,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
         public async Task<IActionResult> Update(int id)
         {
-            Position? position = await _context.Positions.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            Position? position = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id);
 
             if (position == null)
             {
@@ -69,7 +68,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update(int id, PositionDto updatedPosition)
         {
-            Position? position = await _context.Positions.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            Position? position = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id);
 
             if (position == null)
             {
@@ -87,9 +86,10 @@ namespace Fiorella.App.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            Position? position = await _context.Positions.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            Position? position = await _context.Positions.FirstOrDefaultAsync(p => p.Id == id);
 
             if (position == null)
             {

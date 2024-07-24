@@ -15,6 +15,10 @@ html {
 body {
 }
 
+textarea {
+    resize: none;
+}
+
 .fillBar {
     width: 100% !important;
 }

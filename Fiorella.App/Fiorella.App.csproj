@@ -10,7 +10,6 @@
     <Folder Include="Dtos\NewFolder\" />
     <Folder Include="wwwroot\assets\images\blog\" />
     <Folder Include="wwwroot\assets\images\employee\" />
-    <Folder Include="wwwroot\assets\images\product\" />
   </ItemGroup>
 
   <ItemGroup>

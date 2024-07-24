@@ -24,10 +24,10 @@
                         <td>@item.Name</td>
                         <td>@item.Price</td>
                         <td>@item.Info</td>
-                        <td>@string.Join(", ", item.Tags.Select(c => c.Name).Take(3))</td>
-                        <td>@string.Join(", ", item.Categories.Select(c => c.Name).Take(3))</td>
+                        <td>@(item.Tags.Count != 0 ? string.Join(", ", item.Tags.Select(c => c.Name).Take(3)) : "No Tags")</td>
+                        <td>@(item.Categories.Count != 0 ? string.Join(", ", item.Categories.Select(c => c.Name).Take(3)) : "No Categories")</td>
                         <td>
-                            <img src="~/assets/images/Product/@item.Images.FirstOrDefault(i => i.IsMain)?.Url" alt="Product image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" />
+                            <img src="~/assets/images/product/@(item.Images.Count != 0 ? item.Images.FirstOrDefault(i => i.IsMain)?.Url : "default-img.jpg")" alt="Product image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" asp-append-version="true" />
                         </td>
                         <td>
                             <a asp-area="admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary">

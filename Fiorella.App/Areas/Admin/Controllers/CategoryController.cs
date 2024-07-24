@@ -18,17 +18,19 @@ namespace Fiorella.App.Areas.Admin.Controllers
             _context = context;
             _mapper = mapper;
         }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             //IEnumerable<Category> categories = await _context.Categories.Where(x => !x.IsDeleted).ToListAsync();
 
-            var query = _context.Categories.Where(c => !c.IsDeleted);
+            //var query = _context.Categories.Where(c => !c.IsDeleted);
 
-            ICollection<CategoryGetDto> categories = await query.Select(c => _mapper.Map<CategoryGetDto>(c)).ToListAsync();
+            ICollection<CategoryGetDto> categories = await _context.Categories.Select(c => _mapper.Map<CategoryGetDto>(c)).ToListAsync();
 
             return View(categories);
         }
+
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -44,7 +46,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
                 return View(categoryDto);
             }
 
-            if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower() && !c.IsDeleted))
+            if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryDto.Name.ToLower()))
             {
                 ModelState.AddModelError(nameof(categoryDto.Name), $"Category {categoryDto.Name.ToLower()} is already exist");
                 return View();
@@ -62,7 +64,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id)
         {
 
-            Category? category = await _context.Categories.FirstOrDefaultAsync(c => !c.IsDeleted && c.Id == id);
+            Category? category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -78,7 +80,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> Update(int id, CategoryUpdateDto updateCategoryDto)
         {
 
-            Category? category = await _context.Categories.FirstOrDefaultAsync(c => !c.IsDeleted && c.Id == id);
+            Category? category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -98,7 +100,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Remove(int id)
         {
-            Category? category = await _context.Categories.FirstOrDefaultAsync(c => !c.IsDeleted && c.Id == id);
+            Category? category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
 
             if (category == null)
             {

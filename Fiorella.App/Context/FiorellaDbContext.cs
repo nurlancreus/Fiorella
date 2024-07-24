@@ -3,6 +3,7 @@ using Fiorella.App.Models.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq.Expressions;
 
 namespace Fiorella.App.Context
 {
@@ -11,7 +12,9 @@ namespace Fiorella.App.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductCategory> ProductCategory { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<ProductTag> ProductTag { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Employee> Employees { get; set; }
@@ -19,6 +22,15 @@ namespace Fiorella.App.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Apply global query filter for soft delete
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                if (typeof(BaseEntity).IsAssignableFrom(entityType.ClrType))
+                {
+                    modelBuilder.Entity(entityType.ClrType).HasQueryFilter(GetIsDeletedFilter(entityType.ClrType));
+                }
+            }
+
             modelBuilder.Entity<Product>()
                 .Property(p => p.Weight)
                 .HasPrecision(10, 2);
@@ -65,6 +77,8 @@ namespace Fiorella.App.Context
                     {
                         j.HasKey(pt => new { pt.ProductId, pt.TagId });
                     });
+
+            base.OnModelCreating(modelBuilder);
         }
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -76,6 +90,15 @@ namespace Fiorella.App.Context
                 if (entry.State == EntityState.Modified) entry.Entity.UpdatedAt = DateTime.Now;
             }
             return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private static LambdaExpression GetIsDeletedFilter(Type entityType)
+        {
+            var param = Expression.Parameter(entityType, "e");
+            var prop = Expression.Property(param, "IsDeleted");
+            var condition = Expression.Equal(prop, Expression.Constant(false));
+
+            return Expression.Lambda(condition, param);
         }
     }
 }
