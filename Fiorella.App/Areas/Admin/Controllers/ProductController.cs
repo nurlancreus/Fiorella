@@ -50,14 +50,15 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ProductPostDto productDto)
         {
-            ViewBag.Categories = await _context.Categories.Where(c => !c.IsDeleted).Select(c => _mapper.Map<CategoryGetDto>(c)).ToListAsync();
-
-            ViewBag.Tags = await _context.Tags.Where(t => !t.IsDeleted).Select(t => _mapper.Map<TagGetDto>(t)).ToListAsync();
-
-            ViewBag.Discounts = await _context.Discounts.Where(d => !d.IsDeleted).Select(d => _mapper.Map<DiscountGetDto>(d)).ToListAsync();
 
             if (!ModelState.IsValid)
             {
+                ViewBag.Categories = await _context.Categories.Where(c => !c.IsDeleted).Select(c => _mapper.Map<CategoryGetDto>(c)).ToListAsync();
+
+                ViewBag.Tags = await _context.Tags.Where(t => !t.IsDeleted).Select(t => _mapper.Map<TagGetDto>(t)).ToListAsync();
+
+                ViewBag.Discounts = await _context.Discounts.Where(d => !d.IsDeleted).Select(d => _mapper.Map<DiscountGetDto>(d)).ToListAsync();
+
                 return View(productDto);
             }
 

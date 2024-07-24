@@ -48,10 +48,10 @@ namespace Fiorella.App.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeePostDto employeeDto)
         {
-            ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
 
             if (!ModelState.IsValid)
             {
+                ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).Select(p => _mapper.Map<PositionDto>(p)).ToListAsync();
                 return View(employeeDto);
             }
 
@@ -109,6 +109,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
 
             if (!ModelState.IsValid)
             {
+                ViewBag.Positions = await _context.Positions.Where(x => !x.IsDeleted).ToListAsync();
                 return View(updatedEmployee);
             }
 
