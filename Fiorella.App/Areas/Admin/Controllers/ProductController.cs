@@ -3,6 +3,7 @@ using Fiorella.App.Context;
 using Fiorella.App.Dtos.Category;
 using Fiorella.App.Dtos.Discount;
 using Fiorella.App.Dtos.Product;
+using Fiorella.App.Dtos.ProductImage;
 using Fiorella.App.Dtos.Tag;
 using Fiorella.App.Extensions;
 using Fiorella.App.Models;
@@ -156,16 +157,29 @@ namespace Fiorella.App.Areas.Admin.Controllers
             // Handle images
             if (updatedProduct.FormFiles != null)
             {
-                int fileIndex = 0;
+                var productImages = _context.ProductImages;
+
+
                 ICollection<string> fileNames = await updatedProduct.FormFiles.SaveMultipleFileAsync(_webEnv.WebRootPath, "assets/images/product");
 
-                // Clear old images
-                _context.ProductImages.RemoveRange(product.Images);
+                // Clear old images or not if you'd like to add new ones to the olds
+                //_context.ProductImages.RemoveRange(product.Images);
 
-                foreach (var fileName in fileNames)
+                if (!productImages.Any())
                 {
-                    product.Images.Add(new ProductImage { Url = fileName, IsMain = fileIndex == 0 });
-                    fileIndex++;
+                    int fileIndex = 0;
+                    foreach (var fileName in fileNames)
+                    {
+                        product.Images.Add(new ProductImage { Url = fileName, IsMain = fileIndex == 0 });
+                        fileIndex++;
+                    }
+                }
+                else
+                {
+                    foreach (var fileName in fileNames)
+                    {
+                        product.Images.Add(new ProductImage { Url = fileName });
+                    }
                 }
             }
 
@@ -197,29 +211,41 @@ namespace Fiorella.App.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateMainImage([FromBody] int mainImageId)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateMainImage([FromBody] ProductImageUpdateRequestDto request)
         {
+            // Validate the request
+            if (request.MainImageId <= 0)
+            {
+                return Json(new { status = 400, id = request.MainImageId });
+            }
+
+            // Fetch the current main image
             ProductImage? mainImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.IsMain == true);
 
             if (mainImage == null)
             {
-                return NotFound();
+                return NotFound("Main image not found.");
             }
 
-            ProductImage? productImage = await _context.ProductImages.FindAsync(mainImageId);
-
-            if (productImage == null)
+            // Fetch the new main image by id
+            ProductImage? newMainImage = await _context.ProductImages.FindAsync(request.MainImageId);
+            if (newMainImage == null)
             {
-                return NotFound();
+                return NotFound("Image to be set as main not found.");
             }
 
+            // Update the images
             mainImage.IsMain = false;
-            productImage.IsMain = true;
+            newMainImage.IsMain = true;
+
+            // Save changes
             await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Update));
+            // Return a success response
+            return Ok(new { message = "Main image updated successfully." });
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Remove(int id)

@@ -4,7 +4,10 @@
     var Categories = new MultiSelectList(ViewBag.Categories, "Id", "Name");
     var Tags = new MultiSelectList(ViewBag.Tags, "Id", "Name");
     var Discounts = new SelectList(ViewBag.Discounts, "Id", "Percent");
+    var updateMainImageUrl = Url.Action("UpdateMainImage", "Product");
+    var removeImageUrl = Url.Action("RemoveImage", "Product");
 }
+
 
 <div class="container">
     <form asp-action="Update" asp-controller="Product" asp-antiforgery="true" method="post" enctype="multipart/form-data">
@@ -68,15 +71,21 @@
 
         <div class="mb-3">
             @{
+                var mainImage = Model.Images.FirstOrDefault(i => i.IsMain);
+                var otherImages = Model.Images.Where(i => !i.IsMain);
+
                 if (Model.Images.Count > 0)
                 {
-                    <div class="image-container d-flex gap-2">
-                        @foreach (var image in Model.Images)
-                        {
-                            var imageClass = image.IsMain ? "border border-danger" : "";
+                    <div class="image-container d-flex gap-2" data-remove-image-url="@removeImageUrl" data-update-image-url="@updateMainImageUrl">
+                        <div  style="cursor: pointer; width: 300px; height: 300px;">
+                            <img style="width: 100%; height: 100%; object-fit:cover" class="main-image image" data-id="@mainImage?.Id" src="~/assets/images/product/@(mainImage?.Url)" alt="Product Image" />
+                        </div>
 
-                            <div class="image @(imageClass)" data-id="@image.Id" style="cursor: pointer; width: 200px; max-height: 250px;">
-                                <img style="width: 100%" src="~/assets/images/product/@(image.Url)" alt="Product Image" />
+                        @foreach (var image in otherImages)
+                        {
+                            <div style="cursor: pointer; width: 250px; height: 250px;">
+                                <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                <img style="width: 100%; height: 100%; object-fit:cover" class="image" data-id="@image.Id" src="~/assets/images/product/@(image.Url)" alt="Product Image" />
                             </div>
                         }
                     </div>
@@ -91,3 +100,9 @@
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
 </div>
+
+@section Scripts {
+    @{
+       <script src="~/admin/assets/js/changeMainImage.js"></script>
+    }
+}
