@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Fiorella.App.Context;
 using Fiorella.App.Dtos.Category;
 using Fiorella.App.Dtos.Discount;
@@ -140,6 +141,8 @@ namespace Fiorella.App.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 await PopulateViewBags();
+                // If validation error happened, show images nontheless
+                updatedProduct.Images = await _context.ProductImages.Where(i => i.ProductId == product.Id).Select(i => _mapper.Map<ProductImageUpdateDto>(i)).ToListAsync();
 
                 return View(updatedProduct);
             }
@@ -157,15 +160,13 @@ namespace Fiorella.App.Areas.Admin.Controllers
             // Handle images
             if (updatedProduct.FormFiles != null)
             {
-                var productImages = _context.ProductImages;
-
 
                 ICollection<string> fileNames = await updatedProduct.FormFiles.SaveMultipleFileAsync(_webEnv.WebRootPath, "assets/images/product");
 
                 // Clear old images or not if you'd like to add new ones to the olds
                 //_context.ProductImages.RemoveRange(product.Images);
 
-                if (!productImages.Any())
+                if (product.Images.Count == 0)
                 {
                     int fileIndex = 0;
                     foreach (var fileName in fileNames)
@@ -215,24 +216,25 @@ namespace Fiorella.App.Areas.Admin.Controllers
         public async Task<IActionResult> UpdateMainImage([FromBody] ProductImageUpdateRequestDto request)
         {
             // Validate the request
-            if (request.MainImageId <= 0)
+            if (request.ProductId <= 0 || request.ClickedImageId <= 0)
             {
-                return Json(new { status = 400, id = request.MainImageId });
+                return BadRequest(new { message = "Invalid product or image ID.", productId = request.ProductId, imageId = request.ClickedImageId });
             }
 
-            // Fetch the current main image
-            ProductImage? mainImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.IsMain == true);
+            // Fetch the current main image for the product
+            ProductImage? mainImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.ProductId && i.IsMain == true);
 
             if (mainImage == null)
             {
-                return NotFound("Main image not found.");
+                return NotFound(new { message = "Main image not found for the product.", productId = request.ProductId });
             }
 
-            // Fetch the new main image by id
-            ProductImage? newMainImage = await _context.ProductImages.FindAsync(request.MainImageId);
+            // Fetch the new main image by id and product id
+            ProductImage? newMainImage = await _context.ProductImages.FirstOrDefaultAsync(i => i.ProductId == request.ProductId && i.Id == request.ClickedImageId);
+
             if (newMainImage == null)
             {
-                return NotFound("Image to be set as main not found.");
+                return NotFound(new { message = "Image to be set as main not found.", productId = request.ProductId, imageId = request.ClickedImageId });
             }
 
             // Update the images
@@ -243,9 +245,29 @@ namespace Fiorella.App.Areas.Admin.Controllers
             await _context.SaveChangesAsync();
 
             // Return a success response
-            return Ok(new { message = "Main image updated successfully." });
+            return Ok(new { message = "Main image updated successfully.", productId = request.ProductId });
         }
 
+
+        [HttpDelete]
+        public async Task<IActionResult> RemoveImage(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest(new { message = $"{nameof(id)} is invalid.", id });
+            }
+
+            ProductImage? image = await _context.ProductImages.FindAsync(id);
+
+            if (image == null)
+            {
+                return NotFound("Image not found to be deleted");
+            }
+
+            image.IsDeleted = true;
+            await _context.SaveChangesAsync();
+            return Ok(new { message = "Product image removed successfully." });
+        }
 
         [HttpGet]
         public async Task<IActionResult> Remove(int id)

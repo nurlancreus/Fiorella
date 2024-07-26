@@ -3,6 +3,7 @@ using Fiorella.App.Context;
 using Fiorella.App.Dtos.Blog;
 using Fiorella.App.Dtos.Category;
 using Fiorella.App.Dtos.Employee;
+using Fiorella.App.Dtos.Product;
 using Fiorella.App.Models;
 using Fiorella.App.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +27,13 @@ namespace Fiorella.App.Controllers
         {
             HomeViewModel model = new()
             {
-                Categories = await _context.Categories.Where(c => !c.IsDeleted).Select(c => _mapper.Map<CategoryGetDto>(c)).ToListAsync(),
+                Categories = await _context.Categories.Select(c => _mapper.Map<CategoryGetDto>(c)).ToListAsync(),
 
-                Blogs = await _context.Blogs.Where(b => !b.IsDeleted).OrderByDescending(b => b.CreatedAt).Take(3).Select(b => _mapper.Map<BlogGetDto>(b)).ToListAsync(),
+                Blogs = await _context.Blogs.OrderByDescending(b => b.CreatedAt).Take(3).Select(b => _mapper.Map<BlogGetDto>(b)).ToListAsync(),
 
-                Employees = await _context.Employees.Where(e => !e.IsDeleted).Include(e => e.Position).OrderByDescending(e => e.CreatedAt).Take(4).Select(e => _mapper.Map<EmployeeGetDto>(e)).ToListAsync()
+                Employees = await _context.Employees.Include(e => e.Position).OrderByDescending(e => e.CreatedAt).Take(4).Select(e => _mapper.Map<EmployeeGetDto>(e)).ToListAsync(),
+
+                Products = await _context.Products.Include(p => p.Discount).Include(p => p.Categories).Include(p => p.Tags).Include(p => p.Images).OrderByDescending(p => p.CreatedAt).Select(p => _mapper.Map<ProductGetDto>(p)).ToListAsync()
             };
 
             return View(model);

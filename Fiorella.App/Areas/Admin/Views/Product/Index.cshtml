@@ -1,5 +1,18 @@
 ﻿@model IEnumerable<ProductGetDto>
 
+@functions {
+    private string GetProductImageUrl(ProductGetDto item)
+    {
+        if (item.Images.Count == 0)
+        {
+            return "default-img.jpg";
+        }
+
+        var mainImage = item.Images.FirstOrDefault(i => i.IsMain);
+        return mainImage?.Url ?? "default-img.jpg";
+    }
+}
+
 <div class="container">
     <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
         <table class="table table-striped">
@@ -27,7 +40,7 @@
                         <td>@(item.Tags.Count != 0 ? string.Join(", ", item.Tags.Select(c => c.Name).Take(3)) : "No Tags")</td>
                         <td>@(item.Categories.Count != 0 ? string.Join(", ", item.Categories.Select(c => c.Name).Take(3)) : "No Categories")</td>
                         <td>
-                            <img src="~/assets/images/product/@(item.Images.Count != 0 ? item.Images.FirstOrDefault(i => i.IsMain)?.Url : "default-img.jpg")" alt="Product image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" asp-append-version="true" />
+                            <img src="~/assets/images/product/@GetProductImageUrl(item)" alt="Product image" class="img-thumbnail" style="max-width: 150px; max-height: 150px;" asp-append-version="true" />
                         </td>
                         <td>
                             <a asp-area="admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="btn btn-primary">

@@ -9,14 +9,15 @@ namespace Fiorella.App.Validators.Discount
         {
 
             RuleFor(c => c.Percent)
-                .NotNull().WithMessage("Percent field can not be null.")
-                .NotEmpty().WithMessage("Percent field can not be empty.")
-                .Must(BeNumeric).WithMessage("Percent field must be a numeric value.")
-                .InclusiveBetween(0, 100).WithMessage("Percent field must be between 0 and 100.");
+               .NotNull().WithMessage("Percent field can not be null.")
+               .NotEmpty().WithMessage("Percent field can not be empty.")
+               .Must(BeNumeric).WithMessage("Percent field must be a numeric value.")
+               .InclusiveBetween(0, 100).WithMessage("Percent field must be between 0 and 100.");
 
             RuleFor(c => c.StartDate)
                 .NotNull().WithMessage("StartDate field can not be null.")
                 .NotEmpty().WithMessage("StartDate field can not be empty.")
+                .GreaterThan(DateTime.Now).WithMessage("StartDate must be later than the current date and time.")
                 .LessThanOrEqualTo(c => c.EndDate).WithMessage("StartDate must be before or equal to EndDate.");
 
             RuleFor(c => c.EndDate)

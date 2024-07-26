@@ -2,6 +2,7 @@
 {
     public record ProductImageUpdateRequestDto
     {
-        public int MainImageId { get; set; }
+        public int ClickedImageId { get; set; }
+        public int ProductId { get; set; }
     }
 }

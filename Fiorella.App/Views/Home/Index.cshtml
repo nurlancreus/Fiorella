@@ -1,5 +1,7 @@
 ﻿@model HomeViewModel;
-
+@{
+    ViewBag.Title = "Home";
+}
 
 <section id="introduce" class="col-lg-12 col-sm-12 col-12">
     <div class="images">
@@ -120,6 +122,43 @@
                     </div>
                 </div>
             </div>
+            @foreach (var product in Model.Products)
+            {
+                string mainImage = product.Images.FirstOrDefault(i => i.IsMain)?.Url ?? "default-img.jpg";
+
+                <div data-aos-offset="100" class="product col-lg-3 col-md-6 popular winter all">
+                    <a asp-action="Index" asp-controller="Product" asp-route-id="@product.Id">         
+                    <div class="productImage">
+                        <img src="~/assets/images/product/@mainImage"
+                             alt="">
+                        <span class="badge badge-dark bg-dark position-absolute"
+                              style=" top:3%;left: 8%;transform: scale(1.3);">SOLD</span>
+                    </div>
+                    </a>
+                    <div class="productTitle">
+                        <p class="text-uppercase">@product.Name</p>
+                    </div>
+                    <div class="productPrice">
+                        <span class="addToCardBtn" data-id="3">Add to cart</span>
+                        @{
+                            if (product.Discount != null)
+                            {
+                                int discountedPrice = (int)(product.Price - product.Price * (product.Discount.Percent / 100.0));
+
+                                <span style="text-decoration: line-through;">$@product.Price</span>
+                                <span>$@discountedPrice</span>
+                            }
+                            else
+                            {
+                                <span>$@product.Price</span>
+                            }
+                        }
+                    </div>
+                    
+                    <div class="addToCart">
+                    </div>
+                </div>
+            }
             <div data-aos-offset="100"
                  class="product col-lg-3 col-md-6 popular winter all">
                 <div class="productImage">
@@ -131,7 +170,8 @@
                     <p>MAJESTY PALM</p>
                 </div>
                 <div class="productPrice">
-                    <span class="addToCardBtn" data-id="1">Add to cart</span><span>$</span><span>259</span>
+                    <span class="addToCardBtn" data-id="1">Add to cart</span>
+                    <span>$</span><span>259</span>
                 </div>
                 <div class="addToCart">
                 </div>
