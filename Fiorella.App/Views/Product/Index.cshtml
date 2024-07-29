@@ -1,5 +1,11 @@
-﻿@{
+﻿@model ProductGetDto
+
+@{
     ViewBag.Title = "Product Details";
+    var otherImages = Model.Images.Where(i => !i.IsMain).Take(4);
+    var mainImageUrl = Model.Images.FirstOrDefault(i => i.IsMain)?.Url ?? "default-image.jpg";
+    var categories = Model.Categories.Count > 0 ? string.Join(",", Model.Categories.Select(c => c.Name).Take(3)) : "No Categories";
+    var tags = Model.Categories.Count > 0 ? string.Join(",", Model.Tags.Select(c => c.Name).Take(3)) : "No Tags";
 }
 
 <main>
@@ -7,10 +13,10 @@
         <div class="container">
             <div class="col-lg-12 info">
                 <div class="title">
-                    <h1>Product List</h1>
+                    <h1>@Model.Name</h1>
                 </div>
                 <div class="desc">
-                    <p>Where flowers are our inspiration</p>
+                    <p>@Model.Info</p>
                 </div>
             </div>
         </div>
@@ -21,44 +27,32 @@
             <div class="row">
                 <div class="images col-lg-6 col-md-12 col-12">
                     <div class="littleImages">
+                    @foreach (var image in otherImages)
+                    {
+                        
                         <div class="littleimage">
-                            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/shop-2-gallery-4-300x400.jpg"
-                                 alt="" />
+                            <img src="~/assets/images/product/@image.Url"
+                                 alt="product image" />
                         </div>
-                        <div class="littleimage">
-                            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/shop-2-gallery-3-300x400.jpg"
-                                 alt="" />
-                        </div>
-                        <div class="littleimage">
-                            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/shop-2-gallery-2-300x400.jpg"
-                                 alt="" />
-                        </div>
-                        <div class="littleimage">
-                            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/shop-2-gallery-1-300x400.jpg"
-                                 alt="" />
-                        </div>
+                    }
                     </div>
 
                     <div class="bigImage">
-                        <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/shop-2-img.jpg"
-                             alt="" />
+                        <img src="~/assets/images/product/@mainImageUrl"
+                             alt="Main image" />
                     </div>
                 </div>
                 <div class="infos col-lg-6 col-md-12 col-12">
                     <div class="info">
                         <div class="title">
-                            <h1>Orange Amaryllis</h1>
+                            <h1>@Model.TitleDescription</h1>
                         </div>
                         <div class="price">
-                            <p>$259</p>
+                            <p>$@Model.Price</p>
                         </div>
                         <div class="desc">
                             <p>
-                                Class aptent taciti sociosqu ad litora torquent per conubia
-                                nostra, per inceptos himenaeos. Mauris in erat justo. Nullam
-                                ac urna eu felis dapibus condimentum sit amet a augue. Sed
-                                non neque elit. Sed ut imperdiet nisi. Proin condimentum
-                                fermentum nunc.
+                                @Model.Description
                             </p>
                         </div>
                         <div class="button">
@@ -70,8 +64,8 @@
                         </div>
                         <div class="details">
                             <span>SKU: <a href="">989873</a></span>
-                            <span>Categories: <a href=""> Various, Exotic</a></span>
-                            <span>Tags: <a href=""> Lilies, Orchids</a></span>
+                            <span>Categories: <a href="">@categories</a></span>
+                            <span>Tags: <a href="">@tags</a></span>
                         </div>
                     </div>
                 </div>
@@ -206,7 +200,9 @@
     <section id="products">
         <div class="container">
             <div class="row">
-                <div data-aos="flip-up"
+                        <partial name="../Shared/_Products.cshtml" model="ViewBag.Products" />
+                
+                    @* <div data-aos="flip-up"
                      data-aos-duration="1000"
                      class="product col-lg-3 col-md-6 popular winter all">
                     <div class="productImage">
@@ -273,7 +269,7 @@
                         <span>$</span><span>170</span>
                     </div>
                     <div></div>
-                </div>
+                </div> *@
             </div>
         </div>
     </section>

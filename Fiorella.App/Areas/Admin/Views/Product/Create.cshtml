@@ -29,6 +29,18 @@
         </div>
 
         <div class="mb-3">
+            <label asp-for="@Model.TitleDescription" class="form-label"></label>
+            <input asp-for="@Model.TitleDescription" class="form-control" />
+            <span asp-validation-for="@Model.TitleDescription" class="text text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="@Model.Description" class="form-label"></label>
+            <textarea asp-for="@Model.Description" class="form-control" style="resize:none"></textarea>
+            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
+        </div>
+
+        <div class="mb-3">
             <label asp-for="@Model.CategoryIds" class="form-label">Categories</label>
             <select asp-for="@Model.CategoryIds" asp-items="Categories" class="form-control" multiple></select>
             <span asp-validation-for="@Model.CategoryIds" class="text text-danger"></span>

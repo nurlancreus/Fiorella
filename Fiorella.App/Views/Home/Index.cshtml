@@ -40,34 +40,36 @@
                             letter-spacing: 2px;
                             transition: 0.2s;">CATEGORY</span><i style="font-size: 12px;"
                                                                  class="fas fa-chevron-down"></i>
-                    <div class="mdcategories" style="max-width:min-content;">
-                        <span id="firstfilter" data-id="all">ALL</span>
+                    <div class="mdcategories d-flex gap-2" style="max-width:min-content;">
                         @if (Model.Categories.Count == 0)
                         {
                             <h3>There is no Category</h3>
                         }
                         else
                         {
-
-                            @foreach (var item in Model.Categories)
+                            <a style="color: inherit; text-decoration: none" asp-action="Index" asp-controller="Home" asp-route-category="all"><span id="firstfilter" data-id="all">ALL</span></a>
+                            @foreach (var category in Model.Categories)
                             {
-                                <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
+                                <a style="color: inherit; text-decoration: none" asp-action="Index" asp-controller="Home" asp-route-category="@category.Name.ToLower()">
+                                    <span data-id="@category.Name.ToLower()">@category.Name.ToUpper()</span>
+                                </a>
                             }
                         }
                     </div>
                 </div>
-                <div class="filters col-lg-10  ">
-                    <span id="firstfilter" data-id="all">ALL</span>
+                <div class="filters d-flex gap-2 col-lg-10  ">
                     @if (Model.Categories.Count == 0)
                     {
                         <h3>There is no Category</h3>
                     }
                     else
                     {
-
-                        @foreach (var item in Model.Categories)
+                        <a style="color: inherit; text-decoration: none" asp-action="Index" asp-controller="Home" asp-route-category="all"><span id="firstfilter" data-id="all">ALL</span></a>
+                        @foreach (var category in Model.Categories)
                         {
-                            <span data-id="@item.Name.ToLower()">@item.Name.ToUpper()</span>
+                            <a style="color: inherit; text-decoration: none" asp-action="Index" asp-controller="Home" asp-route-category="@category.Name.ToLower()">
+                                <span data-id="@category.Name.ToLower()">@category.Name.ToUpper()</span>
+                            </a>
                         }
                     }
 
@@ -122,171 +124,173 @@
                     </div>
                 </div>
             </div>
-            @foreach (var product in Model.Products)
+            <partial name="../Shared/_Products.cshtml" model="Model.Products.Take(8)" />
+
+            @*  @foreach (var product in Model.Products)
             {
-                string mainImage = product.Images.FirstOrDefault(i => i.IsMain)?.Url ?? "default-img.jpg";
+            string mainImage = product.Images.FirstOrDefault(i => i.IsMain)?.Url ?? "default-img.jpg";
 
-                <div data-aos-offset="100" class="product col-lg-3 col-md-6 popular winter all">
-                    <a asp-action="Index" asp-controller="Product" asp-route-id="@product.Id">         
-                    <div class="productImage">
-                        <img src="~/assets/images/product/@mainImage"
-                             alt="">
-                        <span class="badge badge-dark bg-dark position-absolute"
-                              style=" top:3%;left: 8%;transform: scale(1.3);">SOLD</span>
-                    </div>
-                    </a>
-                    <div class="productTitle">
-                        <p class="text-uppercase">@product.Name</p>
-                    </div>
-                    <div class="productPrice">
-                        <span class="addToCardBtn" data-id="3">Add to cart</span>
-                        @{
-                            if (product.Discount != null)
-                            {
-                                int discountedPrice = (int)(product.Price - product.Price * (product.Discount.Percent / 100.0));
+            <div data-aos-offset="100" class="product col-lg-3 col-md-6 popular winter all">
+            <a asp-action="Index" asp-controller="Product" asp-route-id="@product.Id">
+            <div class="productImage">
+            <img src="~/assets/images/product/@mainImage"
+            alt="">
+            <span class="badge badge-dark bg-dark position-absolute"
+            style=" top:3%;left: 8%;transform: scale(1.3);">SOLD</span>
+            </div>
+            </a>
+            <div class="productTitle">
+            <p class="text-uppercase">@product.Name</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="3">Add to cart</span>
+            @{
+            if (product.Discount != null)
+            {
+            int discountedPrice = (int)(product.Price - product.Price * (product.Discount.Percent / 100.0));
 
-                                <span style="text-decoration: line-through;">$@product.Price</span>
-                                <span>$@discountedPrice</span>
-                            }
-                            else
-                            {
-                                <span>$@product.Price</span>
-                            }
-                        }
-                    </div>
-                    
-                    <div class="addToCart">
-                    </div>
-                </div>
+            <span style="text-decoration: line-through;">$@product.Price</span>
+            <span>$@discountedPrice</span>
+            }
+            else
+            {
+            <span>$@product.Price</span>
+            }
+            }
+            </div>
+
+            <div class="addToCart">
+            </div>
+            </div>
             }
             <div data-aos-offset="100"
-                 class="product col-lg-3 col-md-6 popular winter all">
-                <div class="productImage">
-                    <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-14-img.jpg"
-                         alt="">
+            class="product col-lg-3 col-md-6 popular winter all">
+            <div class="productImage">
+            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-14-img.jpg"
+            alt="">
 
-                </div>
-                <div class="productTitle">
-                    <p>MAJESTY PALM</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="1">Add to cart</span>
-                    <span>$</span><span>259</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            </div>
+            <div class="productTitle">
+            <p>MAJESTY PALM</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="1">Add to cart</span>
+            <span>$</span><span>259</span>
+            </div>
+            <div class="addToCart">
+            </div>
 
             </div>
 
             <div data-aos-offset="100" class="product col-lg-3 col-md-6 popular winter various all">
-                <div class="productImage">
-                    <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-13-img.jpg"
-                         alt="">
-                </div>
-                <div class="productTitle">
-                    <p>FOXGLOW FLOWER</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="2">Add to cart</span> <span>$</span><span>259</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            <div class="productImage">
+            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-13-img.jpg"
+            alt="">
+            </div>
+            <div class="productTitle">
+            <p>FOXGLOW FLOWER</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="2">Add to cart</span> <span>$</span><span>259</span>
+            </div>
+            <div class="addToCart">
+            </div>
             </div>
 
             <div data-aos-offset="100" class="product col-lg-3 col-md-6 popular winter all">
-                <div class="productImage">
-                    <img src=" https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/shop-10-img.jpg"
-                         alt="">
-                    <span class="badge badge-dark bg-dark position-absolute"
-                          style=" top:3%;left: 8%;transform: scale(1.3);">SOLD</span>
-                </div>
-                <div class="productTitle">
-                    <p>SWEET ALYYSUM</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="3">Add to cart</span> <span>$</span><span>259</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            <div class="productImage">
+            <img src=" https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/shop-10-img.jpg"
+            alt="">
+            <span class="badge badge-dark bg-dark position-absolute"
+            style=" top:3%;left: 8%;transform: scale(1.3);">SOLD</span>
+            </div>
+            <div class="productTitle">
+            <p>SWEET ALYYSUM</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="3">Add to cart</span> <span>$</span><span>259</span>
+            </div>
+            <div class="addToCart">
+            </div>
             </div>
 
             <div data-aos-offset="100" class="product col-lg-3 col-md-6 popular all">
-                <div class="productImage">
-                    <img src="   https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-11-img.jpg"
-                         alt="">
-                </div>
-                <div class="productTitle">
-                    <p>SPRING SNOWFLAKE</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="4">Add to cart</span> <span>$</span><span>170</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            <div class="productImage">
+            <img src="   https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-11-img.jpg"
+            alt="">
+            </div>
+            <div class="productTitle">
+            <p>SPRING SNOWFLAKE</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="4">Add to cart</span> <span>$</span><span>170</span>
+            </div>
+            <div class="addToCart">
+            </div>
             </div>
 
             <div data-aos-offset="100" class="product col-lg-3 col-md-6 popular various all">
-                <div class="productImage">
-                    <img src=" https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-12-img.jpg"
-                         alt="">
-                    <span class="badge text-dark bg-light position-absolute"
-                          style="top:3%;left: 8%; transform: scale(1.3);">SALE</span>
-                </div>
-                <div class="productTitle">
-                    <p>SCARLET SAGE</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="5">Add to cart</span> <span style="text-decoration: line-through;">$259</span>
-                    <span>$</span><span>170</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            <div class="productImage">
+            <img src=" https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-12-img.jpg"
+            alt="">
+            <span class="badge text-dark bg-light position-absolute"
+            style="top:3%;left: 8%; transform: scale(1.3);">SALE</span>
+            </div>
+            <div class="productTitle">
+            <p>SCARLET SAGE</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="5">Add to cart</span> <span style="text-decoration: line-through;">$259</span>
+            <span>$</span><span>170</span>
+            </div>
+            <div class="addToCart">
+            </div>
             </div>
 
             <div data-aos-offset="100" class="product col-lg-3 col-md-6 various cactuses all">
-                <div class="productImage">
-                    <img src=" https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-9-img.jpg"
-                         alt="">
-                </div>
-                <div class="productTitle">
-                    <p>ROCK SOAPWORT</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="6">Add to cart</span> <span>$</span><span>259</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            <div class="productImage">
+            <img src=" https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-9-img.jpg"
+            alt="">
+            </div>
+            <div class="productTitle">
+            <p>ROCK SOAPWORT</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="6">Add to cart</span> <span>$</span><span>259</span>
+            </div>
+            <div class="addToCart">
+            </div>
             </div>
 
             <div data-aos-offset="100" class="product col-lg-3 col-md-6 greens all">
-                <div class="productImage">
-                    <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-8-img.jpg"
-                         alt="">
-                </div>
-                <div class="productTitle">
-                    <p>SUMMER SAVORY</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="7">Add to cart</span> <span>$</span><span>259</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            <div class="productImage">
+            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-8-img.jpg"
+            alt="">
+            </div>
+            <div class="productTitle">
+            <p>SUMMER SAVORY</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="7">Add to cart</span> <span>$</span><span>259</span>
+            </div>
+            <div class="addToCart">
+            </div>
             </div>
 
             <div data-aos-offset="100" class="product col-lg-3 col-md-6 exotic all">
-                <div class="productImage">
-                    <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-7-img.jpg"
-                         alt="">
-                </div>
-                <div class="productTitle">
-                    <p>WILD ROSES</p>
-                </div>
-                <div class="productPrice">
-                    <span class="addToCardBtn" data-id="8">Add to cart</span> <span>$</span><span>259</span>
-                </div>
-                <div class="addToCart">
-                </div>
+            <div class="productImage">
+            <img src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/04/shop-7-img.jpg"
+            alt="">
             </div>
+            <div class="productTitle">
+            <p>WILD ROSES</p>
+            </div>
+            <div class="productPrice">
+            <span class="addToCardBtn" data-id="8">Add to cart</span> <span>$</span><span>259</span>
+            </div>
+            <div class="addToCart">
+            </div>
+            </div> *@
         </div>
     </div>
 </section>

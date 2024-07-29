@@ -34,7 +34,7 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="nav-left logo col-lg-2 col-md-4 col-8">
-                        <a href="">
+                        <a asp-action="Index" asp-controller="Home">
                             <img style="width: 100%;"
                                  src="https://fiorello.qodeinteractive.com/wp-content/uploads/2018/05/h2-logo-1.png"
                                  alt="">
@@ -46,7 +46,7 @@
                                     align-items: center;">
                             <ul style="margin-bottom: 0%;">
                                 <li style="border-bottom: 1px solid;">
-                                    <a href=""><span>HOME</span></a>
+                                    <a asp-action="Index" asp-controller="Home"><span>HOME</span></a>
 
 
                                     <div class="homeUlDiv">
@@ -914,7 +914,6 @@
         </nav>
     </header>
     <main>
-
         @RenderBody()
     </main>
 

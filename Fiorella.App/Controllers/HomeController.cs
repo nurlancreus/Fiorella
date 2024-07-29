@@ -9,6 +9,7 @@ using Fiorella.App.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Fiorella.App.Controllers
 {
@@ -23,7 +24,7 @@ namespace Fiorella.App.Controllers
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? category)
         {
             HomeViewModel model = new()
             {
@@ -33,7 +34,7 @@ namespace Fiorella.App.Controllers
 
                 Employees = await _context.Employees.Include(e => e.Position).OrderByDescending(e => e.CreatedAt).Take(4).Select(e => _mapper.Map<EmployeeGetDto>(e)).ToListAsync(),
 
-                Products = await _context.Products.Include(p => p.Discount).Include(p => p.Categories).Include(p => p.Tags).Include(p => p.Images).OrderByDescending(p => p.CreatedAt).Select(p => _mapper.Map<ProductGetDto>(p)).ToListAsync()
+                Products = await _context.Products.Include(p => p.Discount).Include(p => p.Categories).Include(p => p.Tags).Include(p => p.Images).Where(p => category == null || category == "all" || p.Categories.Select(c => c.Name).Contains(category)).OrderByDescending(p => p.CreatedAt).Select(p => _mapper.Map<ProductGetDto>(p)).ToListAsync()
             };
 
             return View(model);

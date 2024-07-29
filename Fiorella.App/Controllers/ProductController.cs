@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Fiorella.App.Context;
 using Fiorella.App.Dtos.Product;
+using Fiorella.App.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,8 @@ namespace Fiorella.App.Controllers
                                     .Where(p => p.Id == id)
                                     .Select(p => _mapper.Map<ProductGetDto>(p))
                                     .FirstOrDefaultAsync();
+
+            ViewBag.Products = _context.Products.OrderByDescending(p => p.CreatedAt).Take(4).Select(p => _mapper.Map<ProductGetDto>(p));
 
             return View(product);
         }
