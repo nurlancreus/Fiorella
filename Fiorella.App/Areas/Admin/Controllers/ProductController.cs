@@ -150,6 +150,7 @@ namespace Fiorella.App.Areas.Admin.Controllers
             // Map updatedProduct to product entity
             product.Name = updatedProduct.Name;
             product.Price = updatedProduct.Price;
+            product.Stock = updatedProduct.Stock;
             product.Info = updatedProduct.Info;
             product.TitleDescription = updatedProduct.TitleDescription;
             product.Description = updatedProduct.Description;

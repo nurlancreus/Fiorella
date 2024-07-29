@@ -192,7 +192,7 @@ $(document).ready(function () {
     })
 
 
-
+    /*
     $(".addToCardBtn").click(function () {
         console.log("CLICKED");
 
@@ -321,8 +321,7 @@ $(document).ready(function () {
 
     }
 
-
-
+*/
 
     // $(".product .productPrice").children().first().click(function(){
 

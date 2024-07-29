@@ -26,6 +26,12 @@
         </div>
 
         <div class="mb-3">
+            <label asp-for="@Model.Stock" class="form-label"></label>
+            <input asp-for="@Model.Stock" class="form-control" />
+            <span asp-validation-for="@Model.Stock" class="text text-danger"></span>
+        </div>
+
+        <div class="mb-3">
             <label asp-for="@Model.Info" class="form-label"></label>
             <textarea asp-for="@Model.Info" class="form-control" style="resize:none"></textarea>
             <span asp-validation-for="@Model.Info" class="text text-danger"></span>

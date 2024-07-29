@@ -21,6 +21,7 @@
                     <th scope="col">Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
                     <th scope="col">Info</th>
                     <th scope="col">Tags</th>
                     <th scope="col">Categories</th>
@@ -36,6 +37,7 @@
                         <th scope="row">@item.Id</th>
                         <td>@item.Name</td>
                         <td>@item.Price</td>
+                        <td>@item.Stock</td>
                         <td>@item.Info</td>
                         <td>@(item.Tags.Count != 0 ? string.Join(", ", item.Tags.Select(c => c.Name).Take(3)) : "No Tags")</td>
                         <td>@(item.Categories.Count != 0 ? string.Join(", ", item.Categories.Select(c => c.Name).Take(3)) : "No Categories")</td>

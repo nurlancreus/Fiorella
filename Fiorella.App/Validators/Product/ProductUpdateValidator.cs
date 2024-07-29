@@ -16,6 +16,9 @@ namespace Fiorella.App.Validators.Product
             RuleFor(p => p.Price)
                 .GreaterThan(0).WithMessage("Price must be greater than 0.");
 
+            RuleFor(p => p.Stock)
+                .GreaterThan(0).WithMessage("Stock must be greater than 0.");
+
             RuleFor(p => p.Info)
                 .MaximumLength(500).WithMessage("Info cannot exceed 500 characters.");
 
