@@ -14,6 +14,8 @@ namespace Fiorella.App.Controllers
     {
         private readonly FiorellaDbContext _context;
         private readonly IMapper _mapper;
+        private readonly string BasketCookieName = "Basket";
+
         public ProductController(FiorellaDbContext context, IMapper mapper)
         {
             _context = context;
@@ -35,10 +37,9 @@ namespace Fiorella.App.Controllers
             return View(product);
         }
 
-        public async Task<IActionResult> AddBasket(int id)
+        [HttpPost]
+        public async Task<IActionResult> AddBasket(int id, [FromBody] int? quantity)
         {
-            string BasketCookieName = "basket";
-
             Product? product = await _context.Products.FindAsync(id);
 
             if (product == null || product.Stock == 0)
@@ -46,17 +47,16 @@ namespace Fiorella.App.Controllers
                 return BadRequest("There is no product");
             }
 
-            IList<BasketViewModel> basketViewModels = [];
+            // Explicitly load the main image
+            await _context.Entry(product)
+                .Collection(p => p.Images)
+                .Query()
+                .Where(i => i.IsMain)
+                .LoadAsync();
 
-            if (Request.Cookies.ContainsKey(BasketCookieName))
-            {
-                var basketJson = Request.Cookies[BasketCookieName];
+            ProductImage? mainImage = product.Images.FirstOrDefault(i => i.IsMain);
 
-                if (basketJson != null)
-                {
-                    basketViewModels = JsonConvert.DeserializeObject<IList<BasketViewModel>>(basketJson) ?? [];
-                }
-            }
+            IList<BasketViewModel> basketViewModels = GetBasketFromCookies();
 
             var existingItem = basketViewModels.FirstOrDefault(x => x.ProductId == id);
 
@@ -66,15 +66,60 @@ namespace Fiorella.App.Controllers
             }
             else
             {
-                basketViewModels.Add(new BasketViewModel
+                BasketViewModel addedProduct = new()
                 {
                     ProductId = id,
-                    Quantity = 1,
-                });
+                    Quantity = quantity ?? 1,
+                    ProductName = product.Name,
+                    Price = product.Price,
+                };
+
+                if (mainImage != null)
+                {
+                    addedProduct.Image = mainImage.Url;
+                }
+
+                basketViewModels.Add(addedProduct);
             }
 
-            var updatedBasketJson = JsonConvert.SerializeObject(basketViewModels);
+            UpdateBasketCookie(basketViewModels);
 
+            return Ok();
+        }
+
+        public IActionResult DeleteBasketItem(int id)
+        {
+            var basketViewModels = GetBasketFromCookies();
+            var itemToRemove = basketViewModels.FirstOrDefault(x => x.ProductId == id);
+
+            if (itemToRemove != null)
+            {
+                basketViewModels.Remove(itemToRemove);
+                UpdateBasketCookie(basketViewModels);
+                return Ok();
+            }
+
+            return NotFound("Item not found in basket");
+        }
+
+        [NonAction]
+        private IList<BasketViewModel> GetBasketFromCookies()
+        {
+            if (Request.Cookies.ContainsKey(BasketCookieName))
+            {
+                var basketJson = Request.Cookies[BasketCookieName];
+                if (!string.IsNullOrEmpty(basketJson))
+                {
+                    return JsonConvert.DeserializeObject<IList<BasketViewModel>>(basketJson) ?? [];
+                }
+            }
+            return [];
+        }
+
+        [NonAction]
+        private void UpdateBasketCookie(IList<BasketViewModel> basketViewModels)
+        {
+            var updatedBasketJson = JsonConvert.SerializeObject(basketViewModels);
             Response.Cookies.Append(BasketCookieName, updatedBasketJson, new CookieOptions
             {
                 Domain = "localhost",
@@ -83,10 +128,6 @@ namespace Fiorella.App.Controllers
                 HttpOnly = true,
                 Secure = true
             });
-
-            TempData[BasketCookieName] = basketViewModels;
-
-            return Ok();
         }
     }
 }

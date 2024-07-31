@@ -1,0 +1,78 @@
+﻿@model BasketSummaryViewModel
+
+<div class="search-shopping col-lg-3">
+    @if (Model.Items.Count == 0)
+    {
+        <div style="position: absolute;top: 100%;opacity: 0%;transition: 0.3s;" class="alert alert-danger d-flex align-items-center basketAlert" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill" /></svg>
+
+            <div>
+                Your basket is empty!
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="basketList" style="height: 0%;">
+            <div class="listProducts">
+                @foreach (var item in Model.Items)
+                {
+                    <div class="product">
+                        <div class="image">
+                            <img src="~/assets/images/product/@item.Image"
+                                 alt="@item.ProductName" asp-append-version="true">
+                        </div>
+                        <div>
+                            <p class="product-name">@item.ProductName</p>
+                            <p>
+                                <span class="product-count">@item.Quantity</span>
+                                X
+                                <span class="product-price">$@item.Price</span>
+                            </p>
+                        </div>
+                        <div>
+                            <div>
+                                <button class="btn-product-delete" data-id="@item.ProductId">x</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="price-buttons">
+                <div class="totalPrice">
+                    <div class="totalText">
+                        <span>TOTAL :</span>
+                    </div>
+                    <div class="priceText">
+                        <span>$</span>
+                        <span>@Model.TotalPrice</span>
+                    </div>
+                </div>
+                <div class="viewCart-checkOut">
+                    <div class="viewCartBox">
+                        <span>VIEW CART</span>
+                    </div>
+                    <div class="checkOutBox">
+                        <span>CHECKOUT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="search-icon">
+        <i class="fas fa-search"></i>
+        <input type="search" placeholder="Search...">
+    </div>
+    <div class="shopping" style="height: 97.52px; align-items: center;">
+        <div class="shop-icon">
+            <i class="fas fa-shopping-bag"></i>
+            <div class="bag-count">
+                <p>@Model.ItemCount</p>
+            </div>
+        </div>
+        <div class="shop-basket">
+            <span>CART</span><span>($</span><span>@Model.TotalPrice</span><span>)</span>
+        </div>
+    </div>
+</div>
+

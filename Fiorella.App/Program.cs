@@ -24,6 +24,8 @@ namespace Fiorella.App
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
 
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
             var app = builder.Build();

@@ -4,52 +4,53 @@
 {
     string mainImage = product.Images.FirstOrDefault(i => i.IsMain)?.Url ?? "default-img.jpg";
 
-    <div data-aos="flip-up" data-aos-offset="100" class="product col-lg-3 col-md-6 popular winter all">
+    <div data-aos="flip-up" data-aos-offset="100" class="product col-lg-3 col-md-6 popular various all">
         <a asp-action="Index" asp-controller="Product" asp-route-id="@product.Id">
+
             <div class="productImage">
                 <img src="~/assets/images/product/@mainImage"
-                     alt="">
-                @{
-                    if (product.Stock == 0)
-                    {
-                        <span class="badge badge-dark bg-dark position-absolute"
-                              style=" top:3%;left: 8%;transform: scale(1.3);">SOLD</span>
-                    }
-                }
-
-            </div>
-        </a>
-        <div class="productTitle">
-            <p class="text-uppercase">@product.Name</p>
-        </div>
-        <div class="productPrice">
-            <span class="addToCardBtn" data-id="3">Add to cart</span>
-            @{
-                if (product.Discount != null)
+                     alt="product image" asp-asp-append-version="true">
+                @if (product.Stock != 0)
                 {
-                    int discountedPrice = (int)(product.Price - product.Price * (product.Discount.Percent / 100.0));
 
-                    <span style="text-decoration: line-through;">$@product.Price</span>
-                    <span>$@discountedPrice</span>
+                    <span class="badge text-dark bg-light position-absolute" style="top:3%;left: 8%; transform: scale(1.3);">SALE</span>
                 }
                 else
                 {
-                    <span>$@product.Price</span>
+                    <span class="badge badge-dark bg-dark position-absolute"
+                          style=" top:3%;left: 8%;transform: scale(1.3);">SOLD</span>
                 }
-            }
+            </div>
+        </a>
+        <div class="productTitle">
+            <p>@product.Name</p>
         </div>
-        @{
-            if (product.Stock != 0)
+        <div class="productPrice">
+            <span class="addToCardBtn" data-id="@product.Id" data-stock="@product.Stock">
+                @* <a style="color: inherit; text-decoration: none;" asp-controller="Product" asp-action="AddBasket" asp-route-id="@product.Id">
+            Add to cart
+            </a> *@
+
+                Add to cart
+            </span>
+
+            @if (product.Discount != null)
             {
-                <a class="addToCart d-block" asp-controller="Product" asp-action="AddBasket" asp-route-id="@product.Id"></a>
+                int discountedPrice = (int)(product.Price - product.Price * (product.Discount.Percent / 100.0));
+
+                <span style="text-decoration: line-through;">$@product.Price</span>
+                <span>$@discountedPrice</span>
             }
             else
             {
-                <div class="text-uppercase">SOLD</div>
+                <span>$@product.Price</span>
             }
-        }
-        @*  <div class="addToCart">
-    </div> *@
+
+        </div>
+        <div class="addToCart">
+        </div>
     </div>
+
+
 }
 
