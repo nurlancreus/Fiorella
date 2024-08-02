@@ -1,5 +1,7 @@
 ﻿using Fiorella.App.Models;
 using Fiorella.App.Models.Base;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
@@ -7,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace Fiorella.App.Context
 {
-    public class FiorellaDbContext(DbContextOptions<FiorellaDbContext> options) : DbContext(options)
+    public class FiorellaDbContext(DbContextOptions<FiorellaDbContext> options) : IdentityDbContext<IdentityUser>(options)
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }

@@ -64,41 +64,37 @@ $(document).ready(function () {
     // console.log(basketlen.length);
 
 
-    $(".search-shopping .shopping").hover(function () {
+    //$(".search-shopping .shopping").hover(function () {
 
-        let basketlen = JSON.parse(localStorage.getItem("basket"))
-        if (basketlen.length == 0) {
-            // alert("basket is empty")
-            $(".basketAlert").css("opacity","100%")
-        }
-        else {
+    //    let basketlen = JSON.parse(localStorage.getItem("basket"))
+    //    if (basketlen.length == 0) {
+    //        // alert("basket is empty")
+    //        $(".basketAlert").css("opacity","100%")
+    //    }
+    //    else {
     
     
-            $(".search-shopping .basketList").css("height", "220px")
-    
-    
-    
-    
-    
-        }
+    //        $(".search-shopping .basketList").css("height", "220px")
 
-    },
+    //    }
+
+    //},
 
 
-        function () {
-            $(".basketAlert").css("opacity","0%")
+        //function () {
+        //    $(".basketAlert").css("opacity","0%")
 
-            $(".search-shopping .basketList").css("height", "0%")
+        //    $(".search-shopping .basketList").css("height", "0%")
 
 
-        }
+        //}
     )
 
-    $(".search-shopping .basketList").hover(function () {
-        $(this).css("height", "220px")
-    }, function () {
-        $(this).css("height", "0%")
-    })
+    //$(".search-shopping .basketList").hover(function () {
+    //    $(this).css("height", "220px")
+    //}, function () {
+    //    $(this).css("height", "0%")
+    //})
 
 
    

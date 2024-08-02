@@ -56,18 +56,19 @@
                             </p>
                         </div>
                         <div class="button product-details-add-basket" data-id="@Model.Id" data-stock="@Model.Stock">
-                            <input type="text" placeholder="Quantity" />
-                            <div class="counter">
-                                <i class="fas fa-chevron-left minus"></i>
-                                <span class="counting">0</span>
-                                <i class="fas fa-chevron-right plus"></i>
-                            </div>
                             @* <button type="button">ADD TO CART <span></span></button> *@
                             @{
                                 if (Model.Stock != 0)
                                 {
-                                    <a class="btn add-basket" asp-controller="Product" asp-action="AddBasket" asp-route-id="@Model.Id">ADD TO CART <span></span></a>
-                                } else
+                                    <input type="text" placeholder="Quantity" />
+                                    <div class="counter">
+                                        <i class="fas fa-chevron-left minus"></i>
+                                        <span class="counting">0</span>
+                                        <i class="fas fa-chevron-right plus"></i>
+                                    </div>
+                                    <button type="button" class="addToBasket">ADD TO CART <span></span></button>
+                                }
+                                else
                                 {
                                     <div class="text-uppercase">SOLD</div>
                                 }

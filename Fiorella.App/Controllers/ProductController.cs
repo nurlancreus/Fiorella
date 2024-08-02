@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Fiorella.App.Context;
+using Fiorella.App.Dtos.Basket;
 using Fiorella.App.Dtos.Product;
 using Fiorella.App.Models;
 using Fiorella.App.ViewModels;
@@ -38,8 +39,11 @@ namespace Fiorella.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBasket(int id, [FromBody] int? quantity)
+        public async Task<IActionResult> AddBasketItem([FromBody] AddBasketItemRequestDto request)
         {
+            int id = request.Id;
+            int? quantity = request.Quantity;
+
             Product? product = await _context.Products.FindAsync(id);
 
             if (product == null || product.Stock == 0)
@@ -62,7 +66,10 @@ namespace Fiorella.App.Controllers
 
             if (existingItem != null)
             {
-                existingItem.Quantity++;
+                if (existingItem.Quantity < product.Stock)
+                {
+                    existingItem.Quantity++;
+                }
             }
             else
             {
@@ -87,7 +94,7 @@ namespace Fiorella.App.Controllers
             return Ok();
         }
 
-        public IActionResult DeleteBasketItem(int id)
+        public IActionResult RemoveBasketItem(int id)
         {
             var basketViewModels = GetBasketFromCookies();
             var itemToRemove = basketViewModels.FirstOrDefault(x => x.ProductId == id);
