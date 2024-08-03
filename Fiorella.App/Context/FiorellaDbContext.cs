@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace Fiorella.App.Context
 {
-    public class FiorellaDbContext(DbContextOptions<FiorellaDbContext> options) : IdentityDbContext<IdentityUser>(options)
+    public class FiorellaDbContext(DbContextOptions<FiorellaDbContext> options) : IdentityDbContext<AppUser, AppRole, int>(options)
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
