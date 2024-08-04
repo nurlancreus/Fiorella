@@ -1,6 +1,6 @@
 ﻿@model BasketSummaryViewModel
 
-<div class="search-shopping col-lg-3">
+<div class="search-shopping col-lg-2">
     @if (Model.Items.Count == 0)
     {
         <div style="position: absolute;top: 100%;opacity: 0%;transition: 0.3s;" class="alert alert-danger d-flex align-items-center basketAlert" role="alert">
@@ -59,10 +59,10 @@
             </div>
         </div>
     }
-    <div class="search-icon">
+@*     <div class="search-icon">
         <i class="fas fa-search"></i>
         <input type="search" placeholder="Search...">
-    </div>
+    </div> *@
     <div class="shopping" style="height: 97.52px; align-items: center;">
         <div class="shop-icon">
             <i class="fas fa-shopping-bag"></i>

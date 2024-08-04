@@ -1,0 +1,50 @@
+﻿@model UpdateRoleViewModel
+
+@{
+    ViewBag.Title = "Update Role";
+}
+<div class="container">
+    <form asp-action="UpdateRole" method="post" method="post">
+        <input type="hidden" asp-for="@Model.Id" />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="mb-3">
+            <label asp-for="@Model.RoleName" class="form-label">Name</label>
+            <input type="text" class="form-control" asp-for="@Model.RoleName">
+            <span asp-validation-for="@Model.RoleName" class="text text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="@Model.Description" class="form-label">Name</label>
+            <textarea asp-for="@Model.Description" style="resize: none;" class="form-control" placeholder="Role description"></textarea>
+            <span asp-validation-for="@Model.Description" class="text text-danger"></span>
+        </div>
+        <a asp-action="ListRoles" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <br />
+    <div class="card">
+        <div class="card-header">
+            <h3>Users in this role</h3>
+        </div>
+        <div class="card-body">
+            @if (Model.Users.Any())
+            {
+                foreach (var user in Model.Users)
+                {
+                    <h5 class="card-title">@user</h5>
+                }
+            }
+            else
+            {
+                <h5 class="card-title">None at the moment</h5>
+            }
+        </div>
+
+        <div class="card-footer">
+            <a asp-controller="RoleAdministration" asp-action="UpdateUsersInRole"
+               asp-route-id="@Model.Id" class="btn btn-primary">
+                Add or Remove Users From This Role
+            </a>
+        </div>
+    </div>
+
+</div>

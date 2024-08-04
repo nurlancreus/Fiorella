@@ -1,0 +1,56 @@
+﻿@model IEnumerable<AppRole>
+
+<div class="container">
+    @if (Model.Any())
+    {
+        <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var role in Model)
+                    {
+                        <tr>
+                            <th scope="row">@role.Id</th>
+                            <td>@role.Name</td>
+                            <td>@(role.Description ?? "No Description")</td>
+                            <td>
+                                <a asp-area="admin" asp-controller="RoleAdministration" asp-action="UpdateRole" asp-route-id="@role.Id" class="btn btn-primary">
+                                    <i class="far fa-pen-to-square"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a asp-area="admin" asp-controller="RoleAdministration" asp-action="RemoveRole" asp-route-id="@role.Id" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <a asp-area="admin" asp-controller="RoleAdministration" asp-action="CreateRole" class="btn btn-success">Create Role</a>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                No roles created yet
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    Use the button below to create a role
+                </h5>
+                <a asp-area="admin" asp-controller="RoleAdministration" asp-action="CreateRole" class="btn btn-success">Create Role</a>
+            </div>
+        </div>
+    }
+    
+</div>

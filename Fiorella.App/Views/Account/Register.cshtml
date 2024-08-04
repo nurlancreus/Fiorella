@@ -1,0 +1,50 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+    <form asp-action="Register" asp-controller="Account" method="post" class="needs-validation" novalidate>
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="@Model.FirstName" class="control-label"></label>
+            <input asp-for="@Model.FirstName" class="form-control" />
+            <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.LastName" class="control-label"></label>
+            <input asp-for="@Model.LastName" class="form-control" />
+            <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Username" class="control-label"></label>
+            <input asp-for="@Model.Username" class="form-control" />
+            <span asp-validation-for="@Model.Username" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Email" class="control-label"></label>
+            <input asp-for="@Model.Email" class="form-control" />
+            <span asp-validation-for="@Model.Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Password" class="control-label"></label>
+            <input asp-for="@Model.Password" class="form-control" />
+            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.ConfirmPassword" class="control-label"></label>
+            <input asp-for="@Model.ConfirmPassword" class="form-control" />
+            <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScripts");
+    }
+} *@

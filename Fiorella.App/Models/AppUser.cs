@@ -4,10 +4,8 @@ namespace Fiorella.App.Models
 {
     public class AppUser : IdentityUser<int>
     {
-        [PersonalData]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
-        [PersonalData]
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
     }
 }

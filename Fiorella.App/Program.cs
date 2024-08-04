@@ -28,19 +28,26 @@ namespace Fiorella.App
                 opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
             });
 
-            builder.Services.AddIdentity<AppUser, IdentityRole>()
+            builder.Services.AddIdentity<AppUser, AppRole>()
                  .AddEntityFrameworkStores<FiorellaDbContext>()
                  .AddDefaultTokenProviders();
+
+            // Configure the Application Cookie settings
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                // If the LoginPath isn't set, ASP.NET Core defaults the path to /Account/Login.
+                options.LoginPath = "/Account/Login"; // Set your login path here
+            });
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
                 // Password settings.
                 options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
+                //options.Password.RequireLowercase = true;
+                //options.Password.RequireNonAlphanumeric = true;
+                //options.Password.RequireUppercase = true;
+                //options.Password.RequiredLength = 6;
+                //options.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
