@@ -2,6 +2,7 @@
 {
     public record CategoryPostDto
     {
+
         public string Name { get; set; } = string.Empty;
     }
 }
